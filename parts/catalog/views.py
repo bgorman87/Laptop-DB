@@ -79,8 +79,8 @@ def item_page(request, model_number):
 
 def home(request):
 
-    recent_parts = list(Part.objects.all()[0:4])
-    recent_laptops = list(Laptop.objects.all()[0:4])
+    recent_parts = list(Part.objects.all()[0:5])
+    recent_laptops = list(Laptop.objects.all()[0:5])
     recent_parts = zip([recent_parts], ["part"])
     recent_laptops = zip([recent_laptops], ["laptop"])
     return render(request, 'base/home.html', {"part_results": recent_parts, "laptop_results": recent_laptops})
