@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <main>
+        <div class='search'>
+            <div class="container">
+                <section class="text-center">
+                    <div class="dark-grey-text text-center m-3 fw-bold">
+                        <strong><h2>Results Containing: {{search_query}}</h2></strong>
+                    </div>
+                    <hr></hr>
+                    <div class="row wow fadeIn">
+                    {% for items, item_type in laptop_results %}
+                        {% for item in items %}
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            {% include 'base/database-feed.html' %}
+                        </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for items, item_type in part_results %}
+                        {% for item in items %}
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            {% include 'base/database-feed.html' %}
+                        </div>
+                        {% endfor %}
+                    {% endfor %}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,12 @@
+<section class="text-center mb-4">
+    <div class="dark-grey-text d-flex justify-content-start">
+        <strong><h4>Recent</h4></strong>
+    </div>
+    <div class="row wow fadeIn">
+    
+      {% for item in results %}
+        {% include 'base/database-feed.html' %}
+      {% endfor %}
+    </div>
+
+  </section>

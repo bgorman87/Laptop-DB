@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <main>
+        <div class='product'>
+            <div class="container">
+                <div class="container-flex-row">
+                    <div class="container-flex-col">
+                        <div class="title-item dark-grey-text">
+                            <strong><h4>{{model_name}} Model: {{model_number}}</h4></strong>
+                        </div>
+                        <div class="image-item">
+                            <img src="{{part.image.url}}" class="card-img-top"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-flex-row-line">
+                </div>
+                <div class="container-flex-row">
+                    <div class="container-flex-col mx-auto ml-1">
+                        <div class="text-item">
+                            <h5>Associated Laptops:</h5>
+                            {% for laptop in laptops %}
+                                <ul><a class="grey-text" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.laptop_model}}</a></ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <main>
+        <div class='product'>
+            <div class="container">
+                <div class="container-flex-row">
+                    <div class="container-flex-col">
+                        <div class="title-item dark-grey-text">
+                            <strong><h4>Laptop Model: {{laptop_model}}</h4></strong>
+                        </div>
+                        <div class="image-item">
+                            <img src="{{ laptop.image.url }}" class="card-img-top"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-flex-row-line">
+                </div>
+                <div class="container-flex-row">
+                    <div class="container-flex-col mx-auto ml-1">
+                        <div class="text-item">
+                            {% for part_list, title in parts %}
+                                    <h5>{{title}}:</h5>
+                                    {% for part in part_list %}
+                                        {% for item in part %}
+                                            {% if "Keyboard" in title %}
+                                                <ul><a class="grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/></ul>
+                                            {% else %}
+                                                <ul><a class="grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a></ul>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% load countries %}
+{% get_countries as countries %}
+
+<div class='add-data'>
+    <div class='container'>
+        <div class='mx-auto'>
+            <form class="form" name="parts-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-group mb-2">
+                    <span class="input-group-text" id="id_manufacturer">Manufacturer</span>
+                    <input type="text" class="form-control" name="manufacturer" id="id_manufacturer" placeholder="Dell, Lenovo, HP, etc..." Required>
+                </div>
+                <div class="input-group mb-2">
+                    <span class="input-group-text" id="id_series">Series</span>
+                    <input type="text" class="form-control" name="series" id="id_series" placeholder="XPS, Thinkpad, Envy, etc..." Required>
+                </div>
+                <div class="input-group mb-2">
+                    <span class="input-group-text" id="id_laptop_model">Model Number</span>
+                    <input type="text" class="form-control" name="laptop_model" id="id_laptop_model" placeholder="Required" Required>
+                </div>
+                <div class="input-group mb-2">
+                    <span class="input-group-text" id="id_serial_number">Serial Number</span>
+                    <input type="text" class="form-control" name="serial_number" id="id_serial_number" placeholder="Optional">
+                </div>
+                <div class="input-group mb-2">
+                    <span class="input-group-text" id="id_country_id">Country</span>
+                    <select class="form-select" id="id_country_id" aria-label="Country select" data-live-search="true" placeholder="Test">
+                        <option selected>Select Country -- Optional</option>
+                        {% for country in countries %}
+                            <option value="{{ country.code }}">{{ country.name }}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+
+                <div class="input-group mb-2">
+                    <input type="file" class="form-control" name="laptop-image" id="id_laptop-image">
+                </div>
+                <input class="btn btn-secondary" type="submit" value="Submit" />
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

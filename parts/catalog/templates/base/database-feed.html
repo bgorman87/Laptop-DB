@@ -1,0 +1,53 @@
+<div class="card">
+    <div class="view overlay m-3">
+        {% if item_type == "part" %}
+            <a href="{% url 'item-page' item %}" class="text-decoration-none dark-grey-text m4-2">
+                {% if 'KEYB' in item.part_type %}
+                <h5>{{ item }}<img class="flag2x" src="{{ item.country_id.flag }}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ item.country_id.name }}"/> </h5>
+                {% else %}
+                    <h5>{{ item }}</h5>
+                {% endif %}
+        {% else %}
+            
+            <a href="{% url 'laptop-page' item %}" class="text-decoration-none dark-grey-text m4-2">
+            <h4>{{ item.manufacturer }}&nbsp{{ item.series }}</h4>
+            <h5>{{ item }}</h5>
+        {% endif %}
+        </a>
+        {% if item_type == "part" %}
+        <a class="image-item mt-1" href="{% url 'item-page' item %}">
+        {% else %}
+        <a class="image-item mt-1" href="{% url 'laptop-page' item %}">
+        {% endif %}
+            <img src="{{ item.image.url }}" class="card-img-top"/>
+        </a>
+    </div>
+
+    <div class="card-body">
+        <h5>
+            {% if item.laptop_model.all.count > 1 %}
+                <div class="mb-2">
+                    <span class="dark-grey-text"> Used in laptops: </span>
+                </div>
+            {% elif item.laptop_model.all.count == 1 %}
+                <div class="mb-2">
+                    <span class="dark-grey-text"> Used in laptop: </span>
+                </div>
+            {% endif %}
+        <strong>
+            <ul class="card-body-ul">
+            {% for laptop in item.laptop_model.all %}
+                <li><a href="{% url 'laptop-page' laptop.laptop_model %}" class="text-decoration-none dark-grey-text">{{ laptop.laptop_model }}</a></li>
+            {% endfor %}
+            </ul>
+        </strong>
+        </h5>
+    </div>
+    <div class="mx-auto my-0 grey-text card-submission-details ">
+        <span>Added {{item.created|timesince}} ago</span>
+        
+    </div>
+    <div class="mx-auto my-0 grey-text card-submission-details ">
+        <span>Submitted by @{{item.created_by}}</span>
+    </div>
+</div>
