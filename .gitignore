@@ -1,2 +1,3 @@
 /venv
 /parts/parts/settings.py
+/parts/parts/wsgi.py
