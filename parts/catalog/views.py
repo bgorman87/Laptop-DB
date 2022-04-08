@@ -1,3 +1,5 @@
+# Catalog views.py
+
 from contextlib import nullcontext
 from operator import attrgetter
 from unicodedata import category
@@ -10,6 +12,7 @@ from itertools import chain
 from django.contrib.auth.models import User
 from .models import *
 from operator import attrgetter
+from django.contrib.auth.decorators import login_required
 
 part_types = {
     'KEYB': 'Keyboard',
@@ -33,7 +36,7 @@ part_types = {
 class SaveError(Exception):
     pass
 
-
+@login_required(login_url='login-page')
 def laptop_page(request, laptop_model):
     
     keyboards = []
@@ -70,13 +73,14 @@ def laptop_page(request, laptop_model):
 
     return render(request, "base/laptop-page.html", {"laptop_model": laptop_model, "laptop": laptop, "parts": parts_data, "non_active": non_active_parts})
 
-
+@login_required(login_url='login-page')
 def item_page(request, model_number):
     part = Part.objects.get(model=model_number)
     part_type = part_types[part.part_type]
     laptops = part.laptop_model.all()
     return render(request, "base/item-page.html", {"model_number": model_number, "laptops": laptops, "model_name": part_type, "part": part})
 
+@login_required(login_url='login-page')
 def home(request):
 
     recent_parts = list(Part.objects.all()[0:4])
@@ -85,6 +89,7 @@ def home(request):
     recent_laptops = zip([recent_laptops], ["laptop"])
     return render(request, 'base/home.html', {"part_results": recent_parts, "laptop_results": recent_laptops})
 
+@login_required(login_url='login-page')
 def search_results(request):
     p = request.GET.get('p') if request.GET.get('p') != None else ''
     if p:
@@ -98,7 +103,7 @@ def search_results(request):
         return render(request, 'base/search-results.html', {"part_results": part_results, "laptop_results": laptop_results, "search_query": p})
     return render(request, 'base/search-results.html', {"results": ''})
 
-
+@login_required(login_url='login-page')
 def add_data(request):
     user = request.user
 
@@ -199,7 +204,7 @@ def add_data(request):
     laptop_form = LaptopForm()
     return render(request, "base/add-data.html", {'form': laptop_form})
     
-
+@login_required(login_url='login-page')
 def add_parts(request, laptop_model):
     
     user = request.user

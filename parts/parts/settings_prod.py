@@ -39,6 +39,9 @@ LOGGING = {
     },
 }
 
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+
 def get_env_variable(var_name):
     try:
         return os.environ[var_name]
@@ -91,6 +94,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'catalog.apps.CatalogConfig',
+    'users.apps.UsersConfig',
 
     "hitcount",
     "django_countries",

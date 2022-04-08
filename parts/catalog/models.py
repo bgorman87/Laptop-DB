@@ -35,7 +35,7 @@ class Laptop(models.Model):
     laptop_model = models.CharField(max_length=200, unique=True, null=True)
     manufacturer = models.CharField(max_length=200, null=True)
     series = models.CharField(max_length=200, null=True)
-    serial_number = models.ManyToManyField(Serial_Number)
+    serial_number = models.ManyToManyField(Serial_Number, blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

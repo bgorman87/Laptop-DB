@@ -42,7 +42,7 @@ body {
     display: flex;
 }
 
-.home, .search, .add-data, .add-parts, .product {
+.home, .search, .add-data, .add-parts, .product, .user-profile, .login, .register {
     background-color: rgb(255, 255, 255);
     min-height: 90vh;
     display: flex;
@@ -51,9 +51,12 @@ body {
     padding-bottom: 5vh;
 }
 
-.home > .container, .search > .container, .add-data > .container, .add-parts > .container, .product > .container {
-    display: flex;
-    height: 80%;
+.naughty {
+    text-align: center;
+}
+
+.login, .register {
+    background-color:rgb(167, 212, 255)
 }
 
 .product .container {
@@ -61,6 +64,8 @@ body {
 }
 
 .container .container-flex-row {
+    display: flex;
+    height: 80%;
     flex-direction: row;
     flex: 1 1 0;
     

@@ -2,37 +2,35 @@
 
 {% block content %}
 
-<div class='add-parts'>
-    <div class='container'>
-        <div class='mx-auto'>
-            <form class="form" name="parts-form" method="POST" enctype="multipart/form-data">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="id_{{laptop_model}}"> Laptop: </span>
-                    <input type="text" class="form-control" value="{{laptop_model}}" name="laptop_model" id="id_{{laptop_model}}" aria-describedby="laptop_model" readonly>
+<div class='add-parts container'>
+    <div class='mx-auto'>
+        <form class="form" name="parts-form" method="POST" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="id_{{laptop_model}}"> Laptop: </span>
+                <input type="text" class="form-control" value="{{laptop_model}}" name="laptop_model" id="id_{{laptop_model}}" aria-describedby="laptop_model" readonly>
+            </div>
+            {% csrf_token %}
+            {% for form, part_title, part_type in form_data %}
+                <div class="input-group mb-1">
+                    <span class="input-group-text" id="id_{{part_type}}">{{part_title}}&nbsp{{form.model.label_tag}}</span>
+                    {% if form.model.value == None %}
+                        <input type="text" class="form-control" name="{{part_type}}" id="id_{{part_type}}">
+                    {% else %}
+                        <input type="text" class="form-control" value="{{form.model.value}}" name="{{part_type}}" id="id_{{part_type}}">
+                    {% endif %}
                 </div>
-                {% csrf_token %}
-                {% for form, part_title, part_type in form_data %}
-                    <div class="input-group mb-1">
-                        <span class="input-group-text" id="id_{{part_type}}">{{part_title}}&nbsp{{form.model.label_tag}}</span>
-                        {% if form.model.value == None %}
-                            <input type="text" class="form-control" name="{{part_type}}" id="id_{{part_type}}">
-                        {% else %}
-                            <input type="text" class="form-control" value="{{form.model.value}}" name="{{part_type}}" id="id_{{part_type}}">
-                        {% endif %}
-                    </div>
-                    <div class="input-group mb-3">
-                        {% if form.image.value == None or "default" in form.image.value|lower %}
-                            <input type="file" class="form-control" name="{{part_type}}-image" id="id_{{part_type}}-image">
-                        {% else %}
-                            <input type="file" class="form-control" value="{{form.image.url}}" name="{{part_type}}-image" id="id_{{part_type}}-image" accept="image/*">
-                            <span class="input-group-text">Currently</span>
-                            <a readonly class="input-group-text" href="/images/{{form.image.value}}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-original-title="<img class='tooltip-img' src='/images/{{form.image.value}}'/><p>Click for hi-res</p>">{{part_title}}&nbspImage</a>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                <input type="submit" value="Submit" />
-            </form>
-        </div>
+                <div class="input-group mb-3">
+                    {% if form.image.value == None or "default" in form.image.value|lower %}
+                        <input type="file" class="form-control" name="{{part_type}}-image" id="id_{{part_type}}-image">
+                    {% else %}
+                        <input type="file" class="form-control" value="{{form.image.url}}" name="{{part_type}}-image" id="id_{{part_type}}-image" accept="image/*">
+                        <span class="input-group-text">Currently</span>
+                        <a readonly class="input-group-text" href="/images/{{form.image.value}}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-original-title="<img class='tooltip-img' src='/images/{{form.image.value}}'/><p>Click for hi-res</p>">{{part_title}}&nbspImage</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <input type="submit" value="Submit" />
+        </form>
     </div>
 </div>
 

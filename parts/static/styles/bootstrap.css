@@ -5042,7 +5042,8 @@ textarea.form-control-lg {
 .alert {
   left: 30%;
   position: absolute;
-  padding: 0.2rem 0.2rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
   padding-top: 6.5vh;
   border: 1px solid transparent;
   border-radius: 0.25rem;
