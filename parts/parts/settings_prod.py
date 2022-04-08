@@ -42,9 +42,8 @@ LOGGING = {
 def get_env_variable(var_name):
     try:
         return os.environ[var_name]
-    except Exception as e:
+    except KeyError:
         error_msg = "set the %s environment variable" % var_name
-        print(e)
         raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -55,7 +54,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_env_variable('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -67,6 +66,7 @@ EMAIL_HOST = get_env_variable('EMAIL_HOST')
 EMAIL_HOST_USER = get_env_variable('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = get_env_variable('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = get_env_variable('EMAIL_PORT')
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
 ALLOWED_HOSTS = [get_env_variable('ALLOWED_HOST1'), get_env_variable('ALLOWED_HOST2')]
 
