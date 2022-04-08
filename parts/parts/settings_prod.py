@@ -15,7 +15,6 @@ from pathlib import Path
 # add this to the import section of the file
 
 
-import environ
 from django.contrib.messages import constants as messages
 from django.core.exceptions import ImproperlyConfigured
 
@@ -39,9 +38,6 @@ LOGGING = {
         },
     },
 }
-env = environ.Env()
-environ.Env.read_env()
-
 
 def get_env_variable(var_name):
     try:
