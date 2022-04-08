@@ -3,3 +3,4 @@ os: linux
 files:
   - source: parts
     destination: /home/ubuntu/django/parts/parts
+file_exists_behavior: OVERWRITE
