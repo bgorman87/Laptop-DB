@@ -42,8 +42,9 @@ LOGGING = {
 def get_env_variable(var_name):
     try:
         return os.environ[var_name]
-    except KeyError:
+    except Exception as e:
         error_msg = "set the %s environment variable" % var_name
+        print(e)
         raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
