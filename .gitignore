@@ -1,4 +1,3 @@
 /venv
 /parts/parts/settings.py
 /parts/parts/wsgi.py
-/parts/db.sqlite3
