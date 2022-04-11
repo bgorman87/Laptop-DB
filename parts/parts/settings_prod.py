@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
 
     "django_countries",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -184,7 +185,7 @@ MEDIA_URL = 'images/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static_root", 
-    "/home/bgorman/django/parts/venv/lib/python3.8/site-packages/django/contrib/admin/static/admin",
+    "/home/bgorman/django/parts/venv/lib/python3.8/site-packages/django/contrib/admin/static/admin/",
 ]
 
 STATIC_ROOT = BASE_DIR / 'static/'
@@ -202,3 +203,9 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_ACCESS_KEY_ID = get_env_variable('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = get_env_variable('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = get_env_variable('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = get_env_variable('AWS_S3_REGION_NAME')
