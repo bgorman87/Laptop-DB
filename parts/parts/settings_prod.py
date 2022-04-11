@@ -184,7 +184,7 @@ STATIC_URL = 'static/'
 MEDIA_URL = 'images/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static"
+    BASE_DIR / "static_root"
 ]
 
 STATIC_ROOT = BASE_DIR / 'static/'
