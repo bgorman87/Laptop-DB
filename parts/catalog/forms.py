@@ -1,7 +1,5 @@
 from .models import *
-from django.apps import apps
-from django.forms import ModelForm, ChoiceField, Form, ClearableFileInput
-from django.contrib.auth.models import User
+from django.forms import ModelForm
 from django.contrib.admin.widgets import AdminFileWidget
 from django import forms
 
