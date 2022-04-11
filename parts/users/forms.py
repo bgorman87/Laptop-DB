@@ -56,7 +56,7 @@ class UsernameVerification(forms.Form):
 class UserPasswordResetForm(PasswordResetForm):
     def __init__(self, *args, **kwargs):
         super(UserPasswordResetForm, self).__init__(*args, **kwargs)
-        self.fields['email'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Email...", "required" : "required"})
+        self.fields['email'].widget.attrs.update({'label' : '', 'class' : 'form-control', "placeholder" : "Email...", "required" : "required"})
 
 class UserPasswordChangeForm(SetPasswordForm):
     def __init__(self, *args, **kwargs):
