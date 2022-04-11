@@ -70,6 +70,7 @@ EMAIL_HOST_USER = get_env_variable('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = get_env_variable('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = get_env_variable('EMAIL_PORT')
 SECRET_KEY = get_env_variable('SECRET_KEY')
+DEFAULT_FROM_EMAIL = FROM_EMAIL
 
 ALLOWED_HOSTS = [get_env_variable('ALLOWED_HOST1'), get_env_variable('ALLOWED_HOST2')]
 
