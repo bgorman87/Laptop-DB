@@ -183,7 +183,8 @@ STATIC_URL = 'static/'
 MEDIA_URL = 'images/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static_root"
+    BASE_DIR / "static_root", 
+    "/home/bgorman/django/parts/venv/lib/python3.8/site-packages/django/contrib/admin/static/admin",
 ]
 
 STATIC_ROOT = BASE_DIR / 'static/'
