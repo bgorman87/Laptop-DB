@@ -97,7 +97,6 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'users.apps.UsersConfig',
 
-    "hitcount",
     "django_countries",
 ]
 
