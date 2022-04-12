@@ -7,6 +7,7 @@ from .models import *
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
+import sys
 
 part_types = {
     'KEYB': 'Keyboard',
@@ -32,8 +33,10 @@ class SaveError(Exception):
 
 
 def image_upload(image_file):
+    print(image_file, file=sys.stderr)
     if settings.USE_S3:
         upload = Upload(file=image_file)
+        print(upload, file=sys.stderr)
         upload.save()
         image_url = upload.file.url
     else:
@@ -197,6 +200,7 @@ def add_data(request):
             if laptop_image:
                 try:
                     laptop.image = image_upload(laptop_image)
+                    print(laptop.image.url, file=sys.stderr)
                     laptop.save()
                 except Exception as e:
                     print(e)
