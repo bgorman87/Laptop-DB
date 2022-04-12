@@ -32,18 +32,18 @@ class SaveError(Exception):
     pass
 
 
-def image_upload(image_file):
-    print(image_file, file=sys.stderr)
-    if settings.USE_S3:
-        upload = Upload(file=image_file)
-        print(upload, file=sys.stderr)
-        upload.save()
-        image_url = upload.file.url
-    else:
-        fs = FileSystemStorage()
-        filename = fs.save(image_file.name, image_file)
-        image_url = fs.url(filename)
-    return image_url
+# def image_upload(image_file):
+#     print(image_file, file=sys.stderr)
+#     if settings.USE_S3:
+#         upload = Upload(file=image_file)
+#         print(upload, file=sys.stderr)
+#         upload.save()
+#         image_url = upload.file.url
+#     else:
+#         fs = FileSystemStorage()
+#         filename = fs.save(image_file.name, image_file)
+#         image_url = fs.url(filename)
+#     return image_url
         
 
 @login_required(login_url='login-page')
@@ -199,7 +199,7 @@ def add_data(request):
             laptop_image = request.FILES.get('laptop-image')
             if laptop_image:
                 try:
-                    laptop.image = image_upload(laptop_image)
+                    laptop.image = laptop_image
                     print(laptop.image.url, file=sys.stderr)
                     laptop.save()
                 except Exception as e:
@@ -263,7 +263,7 @@ def add_parts(request, laptop_model):
                 try:
                     try:
                         part = Part.objects.get(model=model_number)
-                        part.image = image_upload(model_image)
+                        part.image = model_image
                         part.save()
                     except:
                         if model_image:
@@ -273,7 +273,7 @@ def add_parts(request, laptop_model):
                                     created_by=user,
                                     country_id=laptop.country_id,
                                     part_type=part_type,
-                                    image=image_upload(model_image),
+                                    image=model_image,
                                 )
                             except:
                                 Part.objects.create(

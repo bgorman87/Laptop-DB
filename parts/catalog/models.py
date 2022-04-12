@@ -20,9 +20,9 @@ CATEGORY_CHOICES = (
     ('RAM', 'RAM')
 )
 
-class Upload(models.Model):
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    file = models.FileField()
+# class Upload(models.Model):
+#     uploaded_at = models.DateTimeField(auto_now_add=True)
+#     file = models.FileField()
 
 class Serial_Number(models.Model):
     serial_number = models.CharField(max_length=200, unique=True)
