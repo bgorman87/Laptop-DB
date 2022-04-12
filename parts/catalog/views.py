@@ -1,18 +1,12 @@
 # Catalog views.py
 
-from contextlib import nullcontext
-from operator import attrgetter
-from unicodedata import category
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from .forms import *
 from django.contrib import messages
-from django.db.models import Q
-from itertools import chain
-from django.contrib.auth.models import User
 from .models import *
-from operator import attrgetter
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 
 part_types = {
     'KEYB': 'Keyboard',
@@ -35,6 +29,19 @@ part_types = {
 
 class SaveError(Exception):
     pass
+
+
+def image_upload(image_file):
+    if settings.USE_S3:
+        upload = Upload(file=image_file)
+        upload.save()
+        image_url = upload.file.url
+    else:
+        fs = FileSystemStorage()
+        filename = fs.save(image_file.name, image_file)
+        image_url = fs.url(filename)
+    return image_url
+        
 
 @login_required(login_url='login-page')
 def laptop_page(request, laptop_model):
@@ -189,7 +196,7 @@ def add_data(request):
             laptop_image = request.FILES.get('laptop-image')
             if laptop_image:
                 try:
-                    laptop.image = laptop_image
+                    laptop.image = image_upload(laptop_image)
                     laptop.save()
                 except Exception as e:
                     print(e)
@@ -225,7 +232,6 @@ def add_parts(request, laptop_model):
     form_data = zip(forms, part_types.values(), part_types.keys())
     
     if request.method == "POST":
-        print(request.POST)
 
         model_numbers = []
         model_number_images = []
@@ -233,7 +239,7 @@ def add_parts(request, laptop_model):
         laptop_model = request.POST.get('laptop_model')
 
         for part_type in part_types.keys():
-            print(part_type)
+
             try:
                 model_number = request.POST.get(part_type)
             except:
@@ -242,11 +248,10 @@ def add_parts(request, laptop_model):
                 model_number_image = request.POST.get(f"{part_type}-image")
             except:
                 model_number_image = ''
-            print(f"{model_number}-{model_number_image}")
+
             model_number_images.append(model_number_image)
             model_numbers.append(model_number)
-        print(model_number_images)
-        print(model_numbers)
+
         error = False
         
         for part_type, model_number, model_image in zip(part_types, model_numbers, model_number_images):
@@ -254,7 +259,7 @@ def add_parts(request, laptop_model):
                 try:
                     try:
                         part = Part.objects.get(model=model_number)
-                        part.image = model_image
+                        part.image = image_upload(model_image)
                         part.save()
                     except:
                         if model_image:
@@ -264,7 +269,7 @@ def add_parts(request, laptop_model):
                                     created_by=user,
                                     country_id=laptop.country_id,
                                     part_type=part_type,
-                                    image=model_image,
+                                    image=image_upload(model_image),
                                 )
                             except:
                                 Part.objects.create(
