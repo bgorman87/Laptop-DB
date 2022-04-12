@@ -109,7 +109,6 @@ def add_data(request):
 
     if request.method == "POST":
         laptop_form = LaptopForm()
-        print(request.POST)
         laptop_model = request.POST.get('laptop_model').replace(" ","")
         if not laptop_model:
             laptop_form.manufacturer = request.POST.get('manufacturer')
@@ -186,10 +185,11 @@ def add_data(request):
                 print(e)
                 messages.info(request, f"Unable to save laptop country. Try again or notify administrator.")
                 raise SaveError
+            
             laptop_image = request.FILES.get('laptop-image')
             if laptop_image:
                 try:
-                    laptop.series = laptop_image
+                    laptop.image = laptop_image
                     laptop.save()
                 except Exception as e:
                     print(e)

@@ -208,6 +208,6 @@ STATICFILES_DIRS = [
 
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_URL = 'static/'
-MEDIA_URL = 'images/'
+MEDIA_URL = 'static/images/'
 
 MEDIA_ROOT = BASE_DIR / 'static/images/'
