@@ -140,6 +140,7 @@ def add_data(request):
             Laptop.objects.create(
                 laptop_model=laptop_model,
                 created_by=user,
+                image='default.png',
             )
         except Exception as e:
             messages.info(request, f"Unable to add laptop model {laptop_model}. Try again or notify administrator.")
@@ -281,6 +282,7 @@ def add_parts(request, laptop_model):
                                     created_by=user,
                                     country_id=laptop.country_id,
                                     part_type=part_type,
+                                    image='default.png',
                                     )
                         else:
                             try:
@@ -289,6 +291,7 @@ def add_parts(request, laptop_model):
                                     created_by=user,
                                     country_id=laptop.country_id,
                                     part_type=part_type,
+                                    image='default.png',
                                     )
                             except:
                                 raise

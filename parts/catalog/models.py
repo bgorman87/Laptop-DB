@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
+from django.core.exceptions import ValidationError
 
 CATEGORY_CHOICES = (
     ('KEYB', 'Keyboard'),
@@ -24,6 +25,13 @@ CATEGORY_CHOICES = (
 #     uploaded_at = models.DateTimeField(auto_now_add=True)
 #     file = models.FileField()
 
+def validate_file_extension(value):
+  import os
+  ext = os.path.splitext(value.name)[-1]
+  valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.JPG', '.PNG', '.JPEG', '.GIF'],
+  if not ext in valid_extensions:
+    raise ValidationError(u'File not supported!')
+
 class Serial_Number(models.Model):
     serial_number = models.CharField(max_length=200, unique=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -45,7 +53,7 @@ class Laptop(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     country_id = CountryField(blank_label='-- Optional -- Select Country -- ', null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, default="default.png")
+    image = models.FileField(null=True, blank=True, validators=[validate_file_extension])
     
     class Meta:
         ordering = ['-updated', '-created']
@@ -61,7 +69,7 @@ class Part(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     country_id = CountryField(blank_label='-- Select Country --', null=True, blank=True)
     part_type = models.CharField(choices=CATEGORY_CHOICES, max_length=4, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, default="default.png")
+    image = models.FileField(null=True, blank=True, validators=[validate_file_extension])
 
     class Meta:
         ordering = ['-updated', '-created']
