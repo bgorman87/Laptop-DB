@@ -215,6 +215,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles/'),
+    os.path.join(BASE_DIR, 'static/styles'),
+    os.path.join(BASE_DIR, 'static/images'),
+    os.path.join(BASE_DIR, 'static/jquery'),
+    os.path.join(BASE_DIR, 'static/js'),
 ]
 
