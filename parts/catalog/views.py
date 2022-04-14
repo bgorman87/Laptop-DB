@@ -81,7 +81,7 @@ def laptop_page(request, laptop_model):
     parts_lists = [parts_list for parts_list in parts_lists if parts_list]
     parts_data = zip(parts_lists, [part_types[active_part_type] for active_part_type in active_parts])
 
-    return render(request, "base/laptop-page.html", {"laptop_model": laptop_model, "laptop": laptop, "parts": parts_data, "non_active": non_active_parts})
+    return render(request, "base/laptop-page.html", {"laptop": laptop, "parts": parts_data, "non_active": non_active_parts})
 
 @login_required(login_url='login-page')
 def item_page(request, model_number):

@@ -5,22 +5,27 @@
         <div class='product'>
             <div class="container">
                 <div class="container-flex-row">
-                    <div class="container-flex-col">
-                        <div class="title-item dark-grey-text">
-                            <strong><h4>Laptop Model: {{laptop_model}}</h4></strong>
-                        </div>
-                        <div class="image-item">
-                            <img src="{{ laptop.image.url }}" class="card-img-top"/>
+                    <div class="container-flex-row">
+                        <div class="container-flex-col mx-auto ml-1">
+                            <div class="title-item dark-grey-text">
+                                <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})</h2></strong>
+                            </div>
+                            
+                            <div class="image-item mb-5">
+                                <img src="{{ laptop.image.url }}" class="card-img-top"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="container-flex-row-line">
-                </div>
-                <div class="container-flex-row">
-                    <div class="container-flex-col mx-auto ml-1">
-                        <div class="text-item">
+                    <div class="container-flex-row-line">
+                    </div>
+                    <div class="container-flex-row">
+                        <div class="container-flex-col mx-auto ml-1">
                             {% for part_list, title in parts %}
+                            <div class="container-flex-row">    
+                                <div class="container-flex-col dark-grey-text">
                                     <h5>{{title}}:</h5>
+                                </div>
+                                <div class="container-flex-col">
                                     {% for part in part_list %}
                                         {% for item in part %}
                                             {% if "Keyboard" in title %}
@@ -30,6 +35,8 @@
                                             {% endif %}
                                         {% endfor %}
                                     {% endfor %}
+                                </div>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>

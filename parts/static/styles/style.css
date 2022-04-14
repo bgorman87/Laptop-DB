@@ -44,7 +44,7 @@ body {
 
 .home, .search, .add-data, .add-parts, .product, .user-profile, .login, .register {
     background-color: rgb(255, 255, 255);
-    min-height: 90vh;
+    min-height: 89.4vh;
     display: flex;
     flex-direction: column;
     padding-top: 10vh;
@@ -63,17 +63,15 @@ body {
     gap: 5%;
 }
 
-.container .container-flex-row {
+.product .container-flex-row {
     display: flex;
-    height: 80%;
     flex-direction: row;
     flex: 1 1 0;
     
 }
 
-.container .container-flex-row-line {
-    border-right: 1px solid rgba(0, 0, 0, 0.250);
-    border-radius: 0.25rem;
+.container-flex-row-line {
+    border: 1px solid rgb(172, 172, 172);
 }
 
 
@@ -93,7 +91,8 @@ body {
 
 .image-item > img {
     border-radius: 5px;
-    max-height: 20vh;
+    max-height: 30vh;
+    min-height: 25vh;
     object-fit: contain;
 }
 
