@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-
+{% load auth_extras %}
 {% block content %}
     <main>
         <div class='product'>
@@ -8,9 +8,12 @@
                     <div class="container-flex-row">
                         <div class="container-flex-col mx-auto ml-1">
                             <div class="title-item dark-grey-text">
-                                <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})</h2></strong>
+                                {% if request.user|has_group:"admin" %} 
+                                    <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})&nbsp&nbsp&nbsp<a href="{% url 'edit-laptop' laptop.laptop_model %}" class="text-decoration-none dark-grey-text" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Edit all laptop data"><i style="font-size:24px" class="fa">&#xf013;</i></a></h2></strong>
+                                {% else %}
+                                <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})&nbsp&nbsp&nbsp<a href="{% url 'edit-laptop' laptop.laptop_model %}" class="text-decoration-none dark-grey-text" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Add laptop data to empty fields"><i style="font-size:24px" class="fa">&#xf013;</i></a></h2></strong>
+                                {% endif %}
                             </div>
-                            
                             <div class="image-item mb-5">
                                 <img src="{{ laptop.image.url }}" class="card-img-top"/>
                             </div>

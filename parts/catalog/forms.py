@@ -12,10 +12,10 @@ class LaptopForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(LaptopForm, self).__init__(*args, **kwargs)
-        self.fields['laptop_model'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Required", "required" : "required"})
-        self.fields['manufacturer'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Dell, Lenovo, HP, etc..."})
-        self.fields['series'].widget.attrs.update({'class' : 'form-control', "placeholder" : "XPS, Thinkpad, Envy, etc..."})
-        self.fields['serial_number'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Optional"})
+        self.fields['laptop_model'].widget.attrs.update({'class' : 'form-control input-field', "placeholder" : "Required", "required" : "required"})
+        self.fields['manufacturer'].widget.attrs.update({'class' : 'form-control input-field', "placeholder" : "Dell, Lenovo, HP, etc..."})
+        self.fields['series'].widget.attrs.update({'class' : 'form-control input-field', "placeholder" : "XPS, Thinkpad, Envy, etc..."})
+        self.fields['serial_number'].widget.attrs.update({'class' : 'form-control input-field', "placeholder" : "Optional"})
         
 
 class PartForm(ModelForm):

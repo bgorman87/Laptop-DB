@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 import sys
+from users.decorators import allowed_users
 
 part_types = {
     'KEYB': 'Keyboard',
@@ -15,6 +16,26 @@ part_types = {
     'PALR': 'Palm Rest',
     'LCDC': 'LCD Cover',
     'LCD': 'LCD',
+    'LCDB': 'LCD Bezel',
+    'LCDT': 'LCD Touch Assembly',
+    'TRA': 'Track pad',
+    'SPE': 'Speakers',
+    'MIC': 'Microphone',
+    'CAM': 'Camera',
+    'POW': 'Power Button',
+    'HEAT': 'Heat sink',
+    'CDD': 'CD Drive',
+    'WIFI': 'Wi-Fi Adapter',
+    'MOTH': 'Motherboard',
+    'WIFA': 'Wi-Fi Antenna',
+    'DICA': 'Display Cable',
+    'HDDC': 'Hard Drive Caddy',
+    'TPFC': 'Track pad Flex Cable',
+    'PBFC': 'Power Button Flex Cable',
+    'SB01': 'Sub Board 1',
+    'SB02': 'Sub Board 2',
+    'SB03': 'Sub Board 3',
+    'SBFC': 'Sub Board Flex Cable',
     'CHAR': 'Charger',
     'BATT': 'Battery',
     'CHRP': 'Charging Port',
@@ -27,6 +48,8 @@ part_types = {
     'RAM': 'RAM'
     }
 
+def is_member(user, group_name):
+    return user.groups.filter(name=group_name).exists()
 
 class SaveError(Exception):
     pass
@@ -114,27 +137,37 @@ def search_results(request):
     return render(request, 'base/search-results.html', {"results": ''})
 
 @login_required(login_url='login-page')
-def add_data(request):
+def add_laptop(request):
     user = request.user
 
     if request.method == "POST":
-        laptop_form = LaptopForm()
-        laptop_model = request.POST.get('laptop_model').replace(" ","")
-        if not laptop_model:
-            laptop_form.manufacturer = request.POST.get('manufacturer')
-            laptop_form.series = request.POST.get('series')
-            messages.error(request, f"Please enter a valid model number.")
-            return render(request, 'base/add-data.html', {"form": LaptopForm(instance=laptop_form)})
         
+        # Initialize form to fill in incase of error
+        laptop_form = LaptopForm(request.POST, request.FILES)
+
+        # Check if model number was given and if not then return message with form data
+        laptop_model = request.POST.get('laptop_model').replace(" ","")
+        
+        if not laptop_model:
+            messages.error(request, f"Please enter a valid model number.")
+            return render(request, 'base/add-laptop.html', {"form": laptop_form})
+        
+        # Check if model number already exists
+        # If it does then dont even check manufacturer/series just go to page
         try:
             laptop = Laptop.objects.get(laptop_model=laptop_model)
             messages.info(request, f"{laptop_model} found. Update data if available.")
-            return redirect('add-parts', laptop_model=laptop_model)
+            # redirect to laptop page
+            return redirect(f"/laptop/{laptop_model}")
         except Exception as e:
             pass
         
-        laptop_form = LaptopForm().save(commit=False)
-        laptop_form.laptop_model = laptop_model
+        # Check if manufacturer and series were given and if not then return message with form data
+        manufacturer = request.POST.get('manufacturer')
+        series = request.POST.get('series')
+        if not manufacturer or not series:
+            messages.error(request, f"Please enter a valid manufacturer and series.")
+            return render(request, 'base/add-laptop.html', {"form": laptop_form})
         
         try:
             Laptop.objects.create(
@@ -144,7 +177,7 @@ def add_data(request):
             )
         except Exception as e:
             messages.info(request, f"Unable to add laptop model {laptop_model}. Try again or notify administrator.")
-            return redirect('add-data')
+            return render(request, 'base/add-laptop.html', {"form": laptop_form})
 
 
         try:
@@ -154,7 +187,6 @@ def add_data(request):
                 laptop.save()
             except Exception as e:
                 print(e)
-                laptop_form.manufacturer = request.POST.get('manufacturer')
                 messages.info(request, f"Unable to save laptop manufacturer. Try again or notify administrator.")
                 raise SaveError
 
@@ -208,40 +240,25 @@ def add_data(request):
                     messages.info(request, f"Unable to save laptop image. Try again or notify administrator.")
                     raise SaveError
         except SaveError:
-            return render(request, 'base/add-data.html', {"form": laptop_form})            
+            return render(request, 'base/add-laptop.html', {"form": laptop_form})            
             
         messages.success(request, "Thank you for adding to our database.")
-        return redirect('add-parts', laptop_model=laptop_model)
+        return redirect('edit-laptop', laptop_model=laptop_model)
 
     laptop_form = LaptopForm()
-    return render(request, "base/add-data.html", {'form': laptop_form})
+    return render(request, "base/add-laptop.html", {'form': laptop_form})
     
 @login_required(login_url='login-page')
-def add_parts(request, laptop_model):
+def edit_laptop(request, laptop_model):
     
     user = request.user
-
     laptop = Laptop.objects.get(laptop_model=laptop_model)
-    laptop_form = LaptopForm(instance=laptop)
-
-    forms = []
-    for part_type in part_types.keys():
-        try:
-            part = Part.objects.filter(laptop_model=laptop.id).filter(part_type=part_type)
-            part=part[0]
-            part_form = PartForm(instance=part)
-        except Exception as e:
-            part_form = PartForm(instance=user)
-        forms.append(part_form)
-    
-    form_data = zip(forms, part_types.values(), part_types.keys())
-    
+  
     if request.method == "POST":
-
+        
         model_numbers = []
         model_number_images = []
 
-        laptop_model = request.POST.get('laptop_model')
 
         for part_type in part_types.keys():
 
@@ -250,7 +267,7 @@ def add_parts(request, laptop_model):
             except:
                 model_number = ''
             try:
-                model_number_image = request.POST.get(f"{part_type}-image")
+                model_number_image = request.FILES.get(f"{part_type}-image")
             except:
                 model_number_image = ''
 
@@ -259,50 +276,33 @@ def add_parts(request, laptop_model):
 
         error = False
         
+        # Update part data
         for part_type, model_number, model_image in zip(part_types, model_numbers, model_number_images):
             if model_number:
                 try:
                     try:
                         part = Part.objects.get(model=model_number)
+                    except:
+                        part = Part.objects.create(
+                            model=model_number,
+                            part_type=part_type,
+                            created_by=user,
+                            image='default.png',
+                        )
+                        part.laptop_model.add(laptop.id)
+                    # Check if new image is given and if existing image is default, if so then overwrite
+                    if model_image and "/default.png" in part.image.url.lower():
                         part.image = model_image
                         part.save()
-                    except:
-                        if model_image:
-                            try:
-                                Part.objects.create(
-                                    model=model_number,
-                                    created_by=user,
-                                    country_id=laptop.country_id,
-                                    part_type=part_type,
-                                    image=model_image,
-                                )
-                            except:
-                                Part.objects.create(
-                                    model=model_number,
-                                    created_by=user,
-                                    country_id=laptop.country_id,
-                                    part_type=part_type,
-                                    image='default.png',
-                                    )
-                        else:
-                            try:
-                                Part.objects.create(
-                                    model=model_number,
-                                    created_by=user,
-                                    country_id=laptop.country_id,
-                                    part_type=part_type,
-                                    image='default.png',
-                                    )
-                            except:
-                                raise
+                        
                 except Exception as e:
                     print(e)
                     messages.error(request, f"Unable to add model number: {model_number} with part type: {part_type}. Check info or notify administrator.")
 
-
                 try:
-                    part = Part.objects.get(model=model_number)
-                    part.laptop_model.add(laptop.id)
+                    part = Part.objects.filter(model=model_number).filter(laptop_model=laptop.id)
+                    if not part:
+                        part.laptop_model.add(laptop.id)
                 except Exception as e:
                     print(e)
                     messages.error(request, f"Unable to link model number: {model_number} to laptop: {laptop_model}. Check info or notify administrator.")
@@ -310,6 +310,55 @@ def add_parts(request, laptop_model):
             
         if not error:
             messages.success(request, "Thank you for adding to our database.")
-            return redirect("home")        
+            return redirect(f"/laptop/{laptop_model}")
 
-    return render(request, "base/add-parts.html", {'laptop_model': laptop_model, 'form_data': form_data})
+    forms = []
+
+    # Check is user is a mod. If so show all form fields, if not show only blank fields
+    part_types_list = list(part_types.keys())
+    part_types_full_names_list = list(part_types.values())
+    used_part_types_list = []
+    used_part_types_full_names_list = []
+    for i, part_type in enumerate(part_types_list):
+        try:
+            part = Part.objects.filter(laptop_model=laptop.id).filter(part_type=part_type)
+            part = part[0]
+            if part and (is_member(user, "mod") or is_member(user, "admin")):
+                part_form = PartForm(instance=part)
+                forms.append(part_form)
+                used_part_types_list.append(part_type)
+                used_part_types_full_names_list.append(part_types_full_names_list[i])
+            elif not part:
+                part_form = PartForm(instance=user)
+                forms.append(part_form)
+                used_part_types_list.append(part_type)
+                used_part_types_full_names_list.append(part_types_full_names_list[i])
+        except Exception as e:
+            part_form = PartForm(instance=user)
+            forms.append(part_form)
+            used_part_types_list.append(part_type)
+            used_part_types_full_names_list.append(part_types_full_names_list[i])
+    
+    form_data = zip(forms, used_part_types_full_names_list, used_part_types_list)
+
+    return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'form_data': form_data})
+
+# Basic users can only edit missing laptop parts
+def user_add_laptop_data(request, laptop_model):
+
+    user = request.user
+
+    laptop = Laptop.objects.get(laptop_model=laptop_model)
+
+    forms = []
+    form_data = []
+    for part_type in part_types.keys():
+        try:
+            part = Part.objects.filter(laptop_model=laptop.id).filter(part_type=part_type)
+            part=part[0]
+            part_form = PartForm(instance=part)
+        except Exception as e:
+            part_form = PartForm(instance=user)
+        forms.append(part_form)    
+
+    return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'form_data': form_data})
