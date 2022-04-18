@@ -25,7 +25,7 @@
                     {% else %}
                         <input type="file" class="form-control input-group-file" value="{{form.image.url}}" name="{{part_type}}-image" id="id_{{part_type}}-image" accept="image/*">
                         <span class="input-group-text form-span">Currently</span>
-                        <a readonly class="input-group-text form-span" href="/images/{{form.image.value}}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-original-title="<img class='tooltip-img' src='/images/{{form.image.value}}'/><p>Click for hi-res</p>">{{part_title}}&nbspImage</a>
+                        <a readonly class="input-group-text form-span" href="/images/{{form.image.value}}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-original-title="<img class='tooltip-img' src='{{form.image.url}}'/><p>Click for hi-res</p>">{{part_title}}&nbspImage</a>
                     {% endif %}
                 </div>
             {% endfor %}
