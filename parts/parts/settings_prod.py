@@ -99,6 +99,7 @@ INSTALLED_APPS = [
 
     "django_countries",
     "storages",
+    "verify_email.apps.VerifyEmailConfig",
 ]
 
 MIDDLEWARE = [
