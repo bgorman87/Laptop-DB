@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    
+    <title>Verify Email address</title>
+
+    <style>
+        .format-font {
+            font-family: 'Montserrat', sans-serif; 
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+        .my-container {
+            margin: 10px;
+            padding: 10px;
+            padding-top: 0px;
+            justify-content: center;
+            text-align: center;
+            border-radius: 15px;
+            border: 1px solid black;
+            text-color: black;
+        }
+
+        .my-button {
+            padding: 10px;
+            padding-left: 35px;
+            padding-right: 35px;
+            background-color: #9e9e9e;
+            color: white;
+            border-radius: 25px;
+            transition-duration: 500ms;
+            text-decoration: none;
+            
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="my-container">
+
+        <div style="background-color: #9e9e9e; border-radius: 15px;">
+            <h1 class="format-font" style="text-align: center; padding: 2px; color:white;">
+                LaptopDB Verification
+            </h1>
+        </div>
+
+        {% comment %} <h2 class="format-font" style="text-align: center;">E-mail Confirmation</h2> <hr style="background-color:  rgb(110, 3, 211); width:100px"> {% endcomment %}
+
+        <div class="format-font" style="margin-top: 20px; line-height: 1.5;">
+            <p style="text-align: center; font-weight: bold;">Greetings!</p>
+            A new account has been created at laptop-db.com using this e-mail address. 
+            Please click on the verify button below to confirm the email and activate your account, or copy and paste the link at the bottom into your browser.       
+        </div>
+
+        <p class="format-font" style="text-align: center; margin-top: 25px;">
+            Please verify your e-mail :
+            <hr style="background-color: #9e9e9e; width:50px">
+            <div class="format-font" style="text-align: center; margin-top: 25px;" >
+                <a href="{{link}}" class="my-button" >Verify</a>
+            </div>
+        </p>
+    
+        <p class="format-font" style="margin-top: 25px;">
+           <b> Once verified you will be able to login with your credentials. <br> If you did not create an account with this e-mail address, please reply and let us know. </b>
+        </p>
+        <p class="format-font" style="margin-top: 25px; text-decoration: none;">
+            {{link}}
+        </p>
+        <p class="format-font" style="line-height: 1.5; margin-top: 25px;">
+            <b>Thanks for joining!</b>
+        </p>
+        <hr style="background-color:  rgb(110, 3, 211); width:100px; margin-top: 25px;">
+        <h2 class="format-font" style="text-align: center; margin-top: 25px;">The LaptopDB Team</h2> 
+    </div>
+    </div>
+   
+</body>
+</html>

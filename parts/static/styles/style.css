@@ -48,7 +48,16 @@ body {
     display: flex;
 }
 
-.home, .search, .add-data, .add-parts, .product, .user-profile, .login, .register {
+.home, 
+.search, 
+.add-data, 
+.add-parts, 
+.product, 
+.user-profile, 
+.login, 
+.register, 
+.user-notice,
+.verification {
     background-color: rgb(255, 255, 255);
     min-height: 89.4vh;
     display: flex;
@@ -57,11 +66,11 @@ body {
     padding-bottom: 5vh;
 }
 
-.naughty {
+.naughty, .user-notice, .verification {
     text-align: center;
 }
 
-.login, .register {
+.login, .register, .user-notice, .verification {
     background-color:rgb(167, 212, 255)
 }
 

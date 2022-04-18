@@ -218,3 +218,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
 
+LOGIN_URL = 'login-page'
+VERIFICATION_SUCCESS_TEMPLATE = "base/successful-verification.html"
+LINK_EXPIRED_TEMPLATE ="base/expired-verification.html"
+HTML_MESSAGE_TEMPLATE = "base/user-verification-email.html"
+REQUEST_NEW_EMAIL_TEMPLATE = "base/resend-verification.html"
+NEW_EMAIL_SENT_TEMPLATE = "base/new-email-sent.html"
+VERIFICATION_FAILED_TEMPLATE = "base/failed-verification.html"
+SUBJECT = "LaptopDB Account Verification"
+EXPIRE_AFTER = "1h"

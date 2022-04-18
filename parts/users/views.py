@@ -1,26 +1,26 @@
 # Users views.py
 
-from django.forms import ValidationError
-from django.shortcuts import render, redirect, HttpResponse
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 
-
+from django.shortcuts import render, redirect
 from .forms import CreateUserForm, UsernameVerification, UserLogin
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
-from .decorators import allowed_users, unauthenticated_user
+from .decorators import unauthenticated_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
-
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from verify_email.email_handler import send_verification_email
+from catalog.views import is_member
 
 # Create your views here.
 @login_required(login_url='login/')
-@allowed_users(allowed_roles=['admin'])
 def userPage (request, user_name=None):
+
+    if not is_member(request.user, "admin"):
+        return render(request, 'base/user-page-notice.html', {})
+    
     if user_name == None:
         user = request.user
         return redirect('profile-page', user_name=user.username)
@@ -94,14 +94,12 @@ def registerPage (request):
                 messages.error(request, f"Username {username} already exists")
                 return render(request, 'base/register.html', {"form": form})
             except:
-                form.save()
+                inactive_user = send_verification_email(request, form)
                 # user = User.objects.get(username=username)
                 # user.username = username
                 # user.save()
                 # print(user)
-                username = form.cleaned_data.get('username')
-                username = username.lower()
-                messages.success(request, "Account created successfully for " + username)
+                messages.success(request, "Please check your email for verification to login")
             return redirect('login-page')
 
         else:

@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<section class="verification">
+    <div class="container py-5 mx-auto">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="card" style="border-radius: 1rem;">
+                <div class="d-flex align-items-center">
+                    <div class="card-body p-4 p-lg-5 text-black">
+                        <span class="h1 fw-bold mb-3 mx-auto">{{msg}}</span>
+                        <span class="h1 fw-bold mb-3 mx-auto">Please request a new verification link</span>
+                        <form method='POST' >
+                            {% csrf_token %}
+                    
+                            <fieldset>
+                                {{form}}
+                            </fieldset>
+                    
+                            <div class="form-outline mb-4">
+                                <button class="btn btn-dark btn-block w-100" type="submit">Request New Email</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
