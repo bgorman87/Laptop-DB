@@ -1,5 +1,6 @@
 # Catalog views.py
 
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib import messages
@@ -362,3 +363,70 @@ def user_add_laptop_data(request, laptop_model):
         forms.append(part_form)    
 
     return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'form_data': form_data})
+
+def part_upvote(request):
+    user = request.user
+    if user.is_authenticated:
+        if request.method == "POST":
+            part_id = request.POST.get("partid")
+            part = Part.objects.get(id=part_id)
+            user = request.user
+            if user.is_authenticated:
+                result = part.upvote(user)
+                print(result)
+                if "removed" in result.lower():
+                    return JsonResponse({"response": result, "bool": True, "score": part.score, "vote_type": "removed"})
+                return JsonResponse({"response": result, "bool": True, "score": part.score, "vote_type": "upvote"})
+    else:
+        messages.info(request, "You must be logged in to vote.")
+        return redirect('login-page', next=request.path)
+
+def part_downvote(request):
+    user = request.user
+    if user.is_authenticated:
+        if request.method == "POST":
+            part_id = request.POST.get("partid")
+            part = Part.objects.get(id=part_id)
+            user = request.user
+            if user.is_authenticated:
+                result = part.downvote(user)
+                if "removed" in result.lower():
+                    return JsonResponse({"response": result, "bool": True, "score": part.score, "vote_type": "removed"})
+                return JsonResponse({"response": result, "bool": True, "score": part.score, "vote_type": "downvote"})
+    else:
+        messages.info(request, "You must be logged in to vote.")
+        return redirect('login-page', next=request.path)
+
+def laptop_upvote(request):
+    user = request.user
+    if user.is_authenticated:
+        if request.method == "POST":
+            laptop_id = request.POST.get("laptopid")
+            laptop = Laptop.objects.get(id=laptop_id)
+            user = request.user
+            if user.is_authenticated:
+                result = laptop.upvote(user)
+                if "removed" in result.lower():
+                    return JsonResponse({"response": result, "bool": True, "score": laptop.score, "vote_type": "removed"})
+                return JsonResponse({"response": result, "bool": True, "score": laptop.score, "vote_type": "upvote"})
+
+    else:
+        messages.info(request, "You must be logged in to vote.")
+        return redirect('login-page', next=request.path)
+
+def laptop_downvote(request):
+    user = request.user
+    if user.is_authenticated:
+        if request.method == "POST":
+            laptop_id = request.POST.get("laptopid")
+            laptop = Laptop.objects.get(id=laptop_id)
+            user = request.user
+            if user.is_authenticated:
+                result = laptop.downvote(user)
+                if "removed" in result.lower():
+                    return JsonResponse({"response": result, "bool": True, "score": laptop.score, "vote_type": "removed"})
+                return JsonResponse({"response": result, "bool": True, "score": laptop.score, "vote_type": "downvote"})
+    else:
+        messages.info(request, "You must be logged in to vote.")
+        return redirect('login-page', next=request.path)
+

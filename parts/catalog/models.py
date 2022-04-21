@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.core.exceptions import ValidationError
@@ -82,12 +82,56 @@ class Laptop(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     country_id = CountryField(blank_label='-- Optional -- Select Country -- ', null=True, blank=True)
     image = models.FileField(null=True, blank=True, validators=[validate_image_file_extension])
-    
+    score = models.IntegerField(default=0)
+    validated = models.BooleanField(default=False)    
     class Meta:
         ordering = ['-updated', '-created']
 
     def __str__(self):
         return self.laptop_model
+
+    def upvote(self, user):
+        try:
+            self.laptopvote_set.create(user=user, laptop=self, vote_type=True)
+            self.score += 1
+            self.save()
+        except IntegrityError:
+            vote = self.laptopvote_set.filter(user=user)
+            if vote[0].vote_type == False:
+                vote.update(vote_type=True)
+                self.score += 2
+                self.save()
+                return "Downvote switched to upvote"
+            elif vote[0].vote_type == True:
+                self.score -= 1
+                self.save()
+                vote.delete()
+                return "Removed upvote"
+            else:
+                return "You have already voted"
+        return "Vote successful"
+
+    def downvote(self, user):
+        try:
+            self.laptopvote_set.create(user=user, laptop=self, vote_type=False)
+            self.score -= 1
+            self.save()
+        except IntegrityError:
+            vote = self.laptopvote_set.filter(user=user)
+            if vote[0].vote_type == True:
+                vote.update(vote_type=False)
+                self.score -= 2
+                self.save()
+                return "Upvote switched to downvote"
+            elif vote[0].vote_type == False:
+                self.score += 1
+                self.save()
+                vote.delete()
+                return "Removed downvote"
+            else:
+                return "You have already voted"
+        return "Vote successful"
+
 
 class Part(models.Model):
     model = models.CharField(max_length=200, null=True, blank=True, unique=True)
@@ -98,9 +142,74 @@ class Part(models.Model):
     country_id = CountryField(blank_label='-- Select Country --', null=True, blank=True)
     part_type = models.CharField(choices=CATEGORY_CHOICES, max_length=4, null=True, blank=True)
     image = models.FileField(null=True, blank=True, validators=[validate_image_file_extension])
-
+    score = models.IntegerField(default=0)
+    validated = models.BooleanField(default=False)
+            
     class Meta:
         ordering = ['-updated', '-created']
 
     def __str__(self):
         return self.model
+
+    def upvote(self, user):
+        try:
+            self.partvote_set.create(user=user, part=self, vote_type=True)
+            self.score += 1
+            self.save()
+        except IntegrityError:
+            vote = self.partvote_set.filter(user=user)
+            if vote[0].vote_type == False:
+                vote.update(vote_type=True)
+                self.score += 2
+                self.save()
+                return "Downvote switched to upvote"
+            elif vote[0].vote_type == True:
+                vote.update(vote_type=False)
+                self.score -= 1
+                self.save()
+                vote.delete()
+                return "Removed upvote"
+            else:
+                return "You have already voted"
+        return "Upvote successful"
+
+    def downvote(self, user):
+        try:
+            self.partvote_set.create(user=user, part=self, vote_type=False)
+            self.score -= 1
+            self.save()
+        except IntegrityError:
+            vote = self.partvote_set.filter(user=user)
+            if vote[0].vote_type == True:
+                vote.update(vote_type=False)
+                self.score -= 2
+                self.save()
+                return "Upvote switched to downvote"
+            elif vote[0].vote_type == False:
+                self.score += 1
+                self.save()
+                vote.delete()
+                return "Removed downvote"
+            else:
+                return "You have already voted"
+        return "Downvote successful"
+
+class PartVote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    part = models.ForeignKey(Part, on_delete=models.CASCADE)
+    vote_type = models.BooleanField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'part')
+
+class LaptopVote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    laptop = models.ForeignKey(Laptop, on_delete=models.CASCADE)
+    vote_type = models.BooleanField()
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'laptop')

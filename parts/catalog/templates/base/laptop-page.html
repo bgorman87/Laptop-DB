@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% load auth_extras %}
+{% load vote_extras %}
 {% block content %}
     <main>
         <div class='product'>
@@ -9,9 +10,33 @@
                         <div class="container-flex-col mx-auto ml-1">
                             <div class="title-item dark-grey-text">
                                 {% if request.user|has_group:"admin" %} 
-                                    <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})&nbsp&nbsp&nbsp<a href="{% url 'edit-laptop' laptop.laptop_model %}" class="text-decoration-none dark-grey-text" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Edit all laptop data"><i style="font-size:24px" class="fa">&#xf013;</i></a></h2></strong>
+                                    <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp(
+                                        {{laptop.laptop_model}}
+                                        {% csrf_token %}
+                                        <div class="container-flex-row mx-1">
+                                            <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                                        </div>
+                                        <div class="container-flex-row">
+                                            <span class="laptop-score-count-{{laptop.id}}">{{laptop.score}}</span>
+                                        </div>
+                                        <div class="container-flex-row mx-1">
+                                            <i id="laptop-downvote-{{laptop.id}}" class="fa fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                                        </div>
+                                        )&nbsp&nbsp&nbsp<a href="{% url 'edit-laptop' laptop.laptop_model %}" class="text-decoration-none dark-grey-text" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Edit all laptop data"><i style="font-size:24px" class="fa">&#xf013;</i></a></h2></strong>
                                 {% else %}
-                                <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})&nbsp&nbsp&nbsp<a href="{% url 'edit-laptop' laptop.laptop_model %}" class="text-decoration-none dark-grey-text" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Add laptop data to empty fields"><i style="font-size:24px" class="fa">&#xf013;</i></a></h2></strong>
+                                    <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp(
+                                        {{laptop.laptop_model}}
+                                        {% csrf_token %}
+                                        <div class="container-flex-row mx-1">
+                                            <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></>
+                                        </div>
+                                        <div class="container-flex-row">
+                                            <span class="laptop-score-count-{{laptop.id}}">{{laptop.score}}</span>
+                                        </div>
+                                        <div class="container-flex-row mx-1">
+                                            <i id="laptop-downvote-{{laptop.id}}" class="fa fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                                        </div>
+                                        )&nbsp&nbsp&nbsp<a href="{% url 'edit-laptop' laptop.laptop_model %}" class="text-decoration-none dark-grey-text" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Add laptop data to empty fields"><i style="font-size:24px" class="fa">&#xf013;</i></a></h2></strong>
                                 {% endif %}
                             </div>
                             <div class="image-item mb-5">
@@ -31,11 +56,26 @@
                                 <div class="container-flex-col">
                                     {% for part in part_list %}
                                         {% for item in part %}
+                                        <div class="container-flex-row">
                                             {% if "Keyboard" in title %}
                                                 <ul><a class="grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/></ul>
                                             {% else %}
                                                 <ul><a class="grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a></ul>
                                             {% endif %}
+                                            {% comment %} <div class="upvote container-flex-col mx-1"> {% endcomment %}
+                                                {% csrf_token %}                                                
+                                                <div class="container-flex-row mx-1">
+                                                    <i id="part-upvote-{{item.id}}" class="fa fa-arrow-up part-upvote-click {{ item|part_upvoted:request.user }}" data-answer="{{item.id}}"></i>
+                                                </div>
+                                                <div class="container-flex-row">
+                                                    <span class="part-score-count-{{item.id}}">{{item.score}}</span>
+                                                </div>
+                                                <div class="container-flex-row mx-1">
+                                                    <i id="part-downvote-{{item.id}}" class="fa fa-arrow-down part-downvote-click {{ item|part_downvoted:request.user }}" data-answer="{{item.id}}"></i>
+                                                </div>
+                                            {% comment %} </div> {% endcomment %}
+                                            
+                                        </div>
                                         {% endfor %}
                                     {% endfor %}
                                 </div>

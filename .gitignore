@@ -4,3 +4,4 @@
 /parts/db.sqlite3
 /parts/static/images/*
 *__pycache__*
+*migrations*
