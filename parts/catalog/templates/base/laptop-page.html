@@ -54,24 +54,27 @@
                                     {% for part in part_list %}
                                         {% for item in part %}
                                         <div class="container-flex-row dark-grey-text">
+                                            <ul>
                                             {% if "Keyboard" in title %}
-                                                <ul><a class="dark-grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/></ul>
+                                                <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/>
                                             {% else %}
-                                                <ul><a class="dark-grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a></ul>
+                                                <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a>
                                             {% endif %}
-                                            {% comment %} <div class="upvote container-flex-col mx-1"> {% endcomment %}
-                                                {% csrf_token %}                                                
-                                                <div class="container-flex-col mx-1">
-                                                    <i id="part-upvote-{{item.id}}" class="fa fa-arrow-up part-upvote-click {{ item|part_upvoted:request.user }}" data-answer="{{item.id}}"></i>
-                                                </div>
-                                                <div class="container-flex-col">
-                                                    <span class="part-score-count-{{item.id}}">{{item.score}}</span>
-                                                </div>
-                                                <div class="container-flex-col mx-1">
-                                                    <i id="part-downvote-{{item.id}}" class="fa fa-arrow-down part-downvote-click {{ item|part_downvoted:request.user }}" data-answer="{{item.id}}"></i>
-                                                </div>
-                                            {% comment %} </div> {% endcomment %}
+
+                                            </ul>
+                                            {% csrf_token %}                                                
+                                            <div class="container-flex-col mx-1">
+                                                <i id="part-upvote-{{item.id}}" class="fa fa-arrow-up part-upvote-click {{ item|part_upvoted:request.user }}" data-answer="{{item.id}}"></i>
+                                            </div>
+                                            <div class="container-flex-col">
+                                                <span class="part-score-count-{{item.id}}">{{item.score}}</span>
+                                            </div>
+                                            <div class="container-flex-col mx-1">
+                                                <i id="part-downvote-{{item.id}}" class="fa fa-arrow-down part-downvote-click {{ item|part_downvoted:request.user }}" data-answer="{{item.id}}"></i>
+                                            </div>
                                             
+                                            <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{item.model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
+
                                         </div>
                                         {% endfor %}
                                     {% endfor %}
