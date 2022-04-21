@@ -83,7 +83,7 @@ class Laptop(models.Model):
     country_id = CountryField(blank_label='-- Optional -- Select Country -- ', null=True, blank=True)
     image = models.FileField(null=True, blank=True, validators=[validate_image_file_extension])
     score = models.IntegerField(default=0)
-    validated = models.BooleanField(default=False)    
+    verified = models.BooleanField(default=False)    
     class Meta:
         ordering = ['-updated', '-created']
 
@@ -143,7 +143,7 @@ class Part(models.Model):
     part_type = models.CharField(choices=CATEGORY_CHOICES, max_length=4, null=True, blank=True)
     image = models.FileField(null=True, blank=True, validators=[validate_image_file_extension])
     score = models.IntegerField(default=0)
-    validated = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
             
     class Meta:
         ordering = ['-updated', '-created']

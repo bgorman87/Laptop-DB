@@ -8,20 +8,33 @@
                 <div class="container-flex-row">
                     <div class="container-flex-row">
                         <div class="container-flex-col mx-auto ml-1">   
-                            <div class="container-flex-row">
-                                <div class="container-flex-col mx-auto title-item dark-grey-text">
+                            <div class="container-flex-row title-item dark-grey-text h5">
+                                <div class="container-flex-col mx-1">
                                     {% csrf_token %}
-                                    <i id="laptop-upvote-{{laptop.id}}" class="fa fa-2x fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                                    <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click{{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
                                     <span class="laptop-score-count-{{laptop.id}}">{{laptop.score}}</span>
-                                    <i id="laptop-downvote-{{laptop.id}}" class="me-1 fa fa-2x fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                                    <i id="laptop-downvote-{{laptop.id}}" class="me-1 fa fa-arrow-down laptop-downvote-click{{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>
                                 </div>
-                                <div class="container-flex-col mx-auto title-item dark-grey-text">
-                                    {% if request.user|has_group:"admin" %} 
-                                        <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})&nbsp&nbsp&nbsp<a href="{% url 'edit-laptop' laptop.laptop_model %}" class="text-decoration-none dark-grey-text" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Edit all laptop data"><i style="font-size:24px" class="fa">&#xf013;</i></a></h2></strong>
-                                    {% else %}
-                                        <strong><h2>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})&nbsp&nbsp&nbsp<a href="{% url 'edit-laptop' laptop.laptop_model %}" class="text-decoration-none dark-grey-text" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Add laptop data to empty fields"><i style="font-size:24px" class="fa">&#xf013;</i></a></h2></strong>
-                                    {% endif %}
+                                <div class="container-flex-col mx-1">
+                                    <strong>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})</strong>
                                 </div>
+                                <div class="container-flex-col mx-1">
+                                    <i class="{{ laptop|verified }}" aria-hidden="true"></i>
+                                </div>
+                                <div class="container-flex-col mx-3">
+                                    <button class="btn options-btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fal fa-ellipsis-v grey-text"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        {% if request.user|has_group:"admin" %}
+                                        <li><a class="dropdown-item" href="{% url 'edit-laptop' laptop.laptop_model %}">Edit All Components</a></li>
+                                        {% else %}
+                                        <li><a class="dropdown-item" href="{% url 'edit-laptop' laptop.laptop_model %}">Add Components</a></li>
+                                        {% endif %}
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="" disabled>Suggest New Model Number</a></li>
+                                    </ul>
+                                </div> 
                             </div>
                             <div class="image-item mb-5">
                                 <img src="{{ laptop.image.url }}" class="card-img-top"/>
@@ -40,11 +53,11 @@
                                 <div class="container-flex-col">
                                     {% for part in part_list %}
                                         {% for item in part %}
-                                        <div class="container-flex-row">
+                                        <div class="container-flex-row dark-grey-text">
                                             {% if "Keyboard" in title %}
-                                                <ul><a class="grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/></ul>
+                                                <ul><a class="dark-grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/></ul>
                                             {% else %}
-                                                <ul><a class="grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a></ul>
+                                                <ul><a class="dark-grey-text" href="{% url 'item-page' item.model %}">{{item.model}}</a></ul>
                                             {% endif %}
                                             {% comment %} <div class="upvote container-flex-col mx-1"> {% endcomment %}
                                                 {% csrf_token %}                                                
