@@ -172,7 +172,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'ADT'
+TIME_ZONE = 'America/Halifax'
 
 USE_I18N = True
 
