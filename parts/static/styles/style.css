@@ -10,6 +10,29 @@ body {
     border-color: #9e9e9eb2;
 }
 
+.item-card {
+    max-width: 100%;
+}
+@media only screen and (min-width: 2000px) {
+    .user-card {
+        width: 30% !important;
+}
+@media only screen and (min-width: 900px) {
+    .user-card {
+        width: 40% !important;
+    }
+}
+@media only screen and (min-width: 768px) {
+    .user-card {
+        width: 50% !important;
+    }
+}
+@media only screen and (min-width: 0px) {
+    .user-card {
+        width: 100% !important;
+    }
+}
+
 .upvoted {
     color:rgb(128, 248, 138);
 }
@@ -128,7 +151,7 @@ body {
 }
 
 .image-item > img {
-    border-radius: 5px;
+    border-radius: 2%;
     max-height: 30vh;
     min-height: 25vh;
     object-fit: contain;
