@@ -56,7 +56,7 @@
                                         <div class="container-flex-row dark-grey-text">
                                             <ul>
                                             {% if "Keyboard" in title %}
-                                                <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/>
+                                                <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x mx-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/>
                                             {% else %}
                                                 <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a>
                                             {% endif %}
