@@ -4,32 +4,35 @@ body {
     font-family: 'PT-Sans', sans-serif;
 }
 
-.card {
+.card, .user-card {
     border: solid;
     border-width: 1px;
     border-color: #9e9e9eb2;
+    width: 30% !important;
 }
 
 .item-card {
-    max-width: 100%;
+    width: 100% !important;
 }
-@media only screen and (min-width: 2000px) {
+
+@media only screen and (min-width: 0px) {
     .user-card {
-        width: 30% !important;
+        width: 95% !important;
 }
-@media only screen and (min-width: 900px) {
+}
+@media only screen and (min-width: 700px) {
     .user-card {
-        width: 40% !important;
+        width: 70% !important;
     }
 }
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 900px) {
     .user-card {
         width: 50% !important;
     }
 }
-@media only screen and (min-width: 0px) {
+@media only screen and (min-width: 1600px) {
     .user-card {
-        width: 100% !important;
+        width: 35% !important;
     }
 }
 
