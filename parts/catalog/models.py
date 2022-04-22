@@ -37,6 +37,7 @@ CATEGORY_CHOICES = (
     ('LFTH', 'Left Hinge'),
     ('RGTH', 'Right Hinge'),
     ('SAT', 'SATA'),
+    ('SATC', 'SATA Cable'),
     ('POR', 'Ports'),
     ('GRAC', 'Graphics Card'),
     ('RAM', 'RAM')
@@ -111,6 +112,7 @@ class Laptop(models.Model):
                 return "You have already voted"
         return "Vote successful"
 
+
     def downvote(self, user):
         try:
             self.laptopvote_set.create(user=user, laptop=self, vote_type=False)
@@ -131,7 +133,7 @@ class Laptop(models.Model):
             else:
                 return "You have already voted"
         return "Vote successful"
-
+    
 
 class Part(models.Model):
     model = models.CharField(max_length=200, null=True, blank=True, unique=True)

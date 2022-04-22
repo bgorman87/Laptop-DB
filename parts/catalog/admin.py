@@ -4,12 +4,12 @@ from django.contrib import admin
 from .models import *
 
 class LaptopAdmin(admin.ModelAdmin):
-    list_display = ('manufacturer', 'series', 'laptop_model', 'score', 'verified', 'created_by', 'created')
+    list_display = ('manufacturer', 'series', 'laptop_model', 'score', 'verified', 'created_by', 'created', 'updated')
     list_filter = ('manufacturer', 'series', 'laptop_model', 'score', 'verified', 'created_by')
     search_fields = ('laptop_model', 'manufacturer', 'series', 'created_by')
 
 class PartAdmin(admin.ModelAdmin):
-    list_display = ('model', 'part_type', 'score', 'verified', 'created_by', 'created')
+    list_display = ('model', 'part_type', 'score', 'verified', 'created_by', 'created', "updated")
     list_filter = ('model', 'laptop_model', 'part_type', 'score', 'verified', 'created_by')
     search_fields = ('model', 'laptop_model', 'part_type', 'created_by')
 

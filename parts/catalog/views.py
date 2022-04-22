@@ -44,6 +44,7 @@ part_types = {
     'LFTH': 'Left Hinge',
     'RGTH': 'Right Hinge',
     'SAT': 'SATA',
+    'SATC': 'SATA Cable',
     'POR': 'Ports',
     'GRAC': 'Graphics Card',
     'RAM': 'RAM'
@@ -78,6 +79,26 @@ def laptop_page(request, laptop_model):
     palm_rests = []
     lcd_covers = []
     lcds = []
+    lcd_bezels = []
+    lcd_touch_assemblies = []
+    track_pads = []
+    speakers = []
+    microphones = []
+    cameras = []
+    power_buttons = []
+    heat_sinks = []
+    cd_drives = []
+    wifi_adapters = []
+    motherboards = []
+    wifi_antennas = []
+    display_cables = []
+    hard_drive_caddies = []
+    track_pad_flex_cables = []
+    power_button_flex_cables = []
+    sub_boards_1 = []
+    sub_boards_2 = []
+    sub_boards_3 = []
+    sub_board_flex_cables = []
     chargers = []
     batteries = []
     charging_ports = []
@@ -85,19 +106,20 @@ def laptop_page(request, laptop_model):
     left_hinges = []
     right_hinges = []
     satas = []
+    sata_cables = []
     ports = []
     graphics_cards = []
     rams = []
 
-    parts_lists = [keyboards, bottom_covers, palm_rests, lcd_covers, lcds, chargers, batteries, charging_ports, cpu_fans, left_hinges, right_hinges, satas, ports, graphics_cards, rams]
+    parts_lists = [keyboards , bottom_covers, palm_rests, lcd_covers, lcds, lcd_bezels, lcd_touch_assemblies, track_pads, speakers, microphones, cameras, power_buttons, heat_sinks, cd_drives, wifi_adapters, motherboards, wifi_antennas, display_cables, hard_drive_caddies, track_pad_flex_cables, power_button_flex_cables, sub_boards_1, sub_boards_2, sub_boards_3, sub_board_flex_cables, chargers, batteries, charging_ports, cpu_fans, left_hinges, right_hinges, satas, sata_cables, ports, graphics_cards, rams]
 
     laptop = Laptop.objects.get(laptop_model=laptop_model)
     active_parts = []
 
-
     for parts_list, part_type in zip(parts_lists, part_types.keys()):
-        
+
         parts = Part.objects.filter(laptop_model=laptop.id).filter(part_type=part_type)
+
         if parts:
             parts_list.append(parts)
             active_parts.append(part_type)
