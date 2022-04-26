@@ -7,9 +7,7 @@ from django.contrib import messages
 from .models import *
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
 import sys
-from users.decorators import allowed_users
 
 part_types = {
     'KEYB': 'Keyboard',
@@ -56,6 +54,16 @@ def is_member(user, group_name):
 class SaveError(Exception):
     pass
 
+
+def valid_file_extension(value):
+    import os
+    ext = os.path.splitext(value.name)[-1]
+    print(ext)
+    valid_extensions = ['.png', '.jpg', '.jpeg', '.gif'],
+    valid = False
+    if ext.lower() in valid_extensions:
+        valid = True
+    return valid
 
 # def image_upload(image_file):
 #     print(image_file, file=sys.stderr)
@@ -254,6 +262,14 @@ def add_laptop(request):
             
             laptop_image = request.FILES.get('laptop-image')
             if laptop_image:
+                size = laptop_image.size
+                print(size)
+                if size > settings.MAX_UPLOAD_SIZE:
+                    messages.info(request, f"Laptop image too large. Image not saved.")
+                    raise SaveError
+                if not valid_file_extension(laptop_image):
+                    messages.info(request, f"Invalid file extension. Image not saved.")
+                    raise SaveError
                 try:
                     laptop.image = laptop_image
                     print(laptop.image.url, file=sys.stderr)
@@ -314,9 +330,22 @@ def edit_laptop(request, laptop_model):
                         )
                         part.laptop_model.add(laptop.id)
                     # Check if new image is given and if existing image is default, if so then overwrite
-                    if model_image and "/default.png" in part.image.url.lower():
-                        part.image = model_image
-                        part.save()
+                    if not is_member(user, "admin"):
+                        if model_image and "/default.png" in part.image.url.lower():
+                            if valid_file_extension(model_image.name):
+                                if model_image.size > settings.MAX_UPLOAD_SIZE:
+                                    messages.debug(request, f"{model_number} image too large. Choose a new image or notify administrator.")
+                                    error = True
+                                part.image = model_image
+                                part.save()
+                            else: messages.error(request, f"{model_number} image is not a valid file type. Choose a new image or notify administrator.")
+                    else:
+                        if model_image and valid_file_extension(model_image.name):
+                            part.image = model_image
+                            part.save()
+                        elif not valid_file_extension(model_image.name):
+                            messages.error(request, f"{model_number} image is not a valid file type. Choose a new image.")
+                            error = True
                         
                 except Exception as e:
                     print(e)

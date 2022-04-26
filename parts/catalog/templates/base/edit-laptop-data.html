@@ -21,9 +21,9 @@
                 </div>
                 <div class="input-group mb-3">
                     {% if form.image.value == None or "default" in form.image.value|lower %}
-                        <input type="file" class="form-control input-group-file" name="{{part_type}}-image" id="id_{{part_type}}-image">
+                        <input type="file" onchange="validateSize(this)" class="form-control input-group-file" name="{{part_type}}-image" id="id_{{part_type}}-image">
                     {% else %}
-                        <input type="file" class="form-control input-group-file" value="{{form.image.url}}" name="{{part_type}}-image" id="id_{{part_type}}-image" accept="image/*">
+                        <input type="file" onchange="validateSize(this)" class="form-control input-group-file" value="{{form.image.url}}" name="{{part_type}}-image" id="id_{{part_type}}-image" accept="image/*">
                         <span class="input-group-text form-span">Currently</span>
                         <a readonly class="input-group-text form-span" href="/images/{{form.image.value}}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-original-title="<img class='tooltip-img' src='{{form.image.url}}'/><p>Click for hi-res</p>">{{part_title}}&nbspImage</a>
                     {% endif %}

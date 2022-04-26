@@ -5,10 +5,12 @@
 {% load countries %}
 {% get_countries as countries %}
 
+
+
 <div class='add-data container'>
     <div class='mx-auto'>
             <form class="form" name="parts-form" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+                {% csrf_token %}                
                 <div class="input-group mb-2">
                     <span class="input-group-text form-span" id="id_manufacturer">Manufacturer</span>
                     {{ form.manufacturer }}
@@ -43,10 +45,10 @@
                 </div>
 
                 <div class="input-group mb-2">
-                    <input type="file" class="form-control input-group-file" name="laptop-image" id="id_laptop-image">
+                    <input id="image-input" type="file" onchange="validateSize(this)" class="form-control input-group-file" name="laptop-image" id="id_laptop-image">
                 </div>
                 <div class="form-outline mb-4">
-                    <button class="btn btn-dark btn-block w-100" type="submit">Submit</button>
+                    <button class="btn btn-dark btn-block w-100" type="submit" id="submit-button">Submit</button>
                 </div>
             </form>
     </div>

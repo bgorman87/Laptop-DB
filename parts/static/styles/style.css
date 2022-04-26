@@ -37,15 +37,21 @@ body {
 }
 
 .upvoted {
-    color:rgb(128, 248, 138);
+    color:rgb(76, 185, 55);
 }
 
 .downvoted {
-    color:rgb(248, 128, 128);
+    color:rgb(255, 128, 128);
+}
+
+/* add a red border and red glow */
+.file-okay {
+    border: 1px solid #ff0000b2;
+    box-shadow: 0 0 0 1px #ff0000b2;
 }
 
 .verified {
-    color:rgb(128, 208, 255);
+    color:rgb(128, 200, 255);
     vertical-align: top;
     
 }

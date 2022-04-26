@@ -50,13 +50,10 @@ CATEGORY_CHOICES = (
 def validate_file_extension(value):
     import os
     ext = os.path.splitext(value.name)[-1]
-    print(ext)
-    valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.JPG', '.PNG', '.JPEG', '.GIF'],
+    valid_extensions = ['.png', '.jpg', '.jpeg', '.gif'],
     valid = False
-    for extension in valid_extensions:
-        if extension == ext:
-            valid = True
-            break    
+    if ext.lower() in valid_extensions:
+        valid = True
     if not valid:
         raise ValidationError(u'File not supported!')
 
