@@ -52,7 +52,7 @@
     function validateSize(input) {
       const fileSize = input.files[0].size / 1024 / 1024; // in MiB
       var file_extension = input.files[0].name.split('.').pop().toLowerCase();
-      if (file_extension != 'jpg' || file_extension != 'png' || file_extension != 'jpeg' || file_extension != 'gif') {
+      if (file_extension != 'jpg' && file_extension != 'png' && file_extension != 'jpeg' && file_extension != 'gif') {
         alert('Please choose a valid image file');
         input.value = '';
         return false;
@@ -72,7 +72,7 @@
         var file = $('#image-input')[0].files[0];
         var element = document.getElementById('image-input');
         var file_extension = file.name.split('.').pop().toLowerCase();
-        if (file_extension != 'jpg' || file_extension != 'png' || file_extension != 'jpeg' || file_extension != 'gif') {
+        if (file_extension != 'jpg' && file_extension != 'png' && file_extension != 'jpeg' && file_extension != 'gif') {
           alert('Please choose a valid image file');
           element.value = '';
           return false;
