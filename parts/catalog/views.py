@@ -291,14 +291,35 @@ def add_laptop(request):
 def edit_laptop(request, laptop_model):
     
     user = request.user
-    laptop = Laptop.objects.get(laptop_model=laptop_model)
-  
+    try:
+        laptop = Laptop.objects.get(laptop_model=laptop_model)
+    except Exception as e:
+        messages.info(request, f"Unable to find laptop model {laptop_model}. Try again or notify administrator.")
+        return redirect('home-page')
+    
+    
     if request.method == "POST":
         
         model_numbers = []
         model_number_images = []
 
 
+        laptop_image = request.FILES.get('laptop-image')
+        if laptop_image:
+            size = laptop_image.size
+            if size > settings.MAX_UPLOAD_SIZE:
+                messages.info(request, f"Laptop image too large. Image not saved.")
+                raise SaveError
+            if not valid_file_extension(laptop_image):
+                messages.info(request, f"Invalid file extension. Image not saved.")
+                raise SaveError
+            try:
+                laptop.image = laptop_image
+                laptop.save()
+            except Exception as e:
+                print(e)
+                messages.info(request, f"Unable to save laptop image. Try again or notify administrator.")
+                raise SaveError
         for part_type in part_types.keys():
 
             try:
@@ -312,60 +333,61 @@ def edit_laptop(request, laptop_model):
 
             model_number_images.append(model_number_image)
             model_numbers.append(model_number)
-
-        error = False
         
         # Update part data
-        for part_type, model_number, model_image in zip(part_types, model_numbers, model_number_images):
-            if model_number:
-                try:
+        try:
+            for part_type, model_number, model_image in zip(part_types, model_numbers, model_number_images):
+                if model_number:
                     try:
-                        part = Part.objects.get(model=model_number)
-                    except:
-                        part = Part.objects.create(
-                            model=model_number,
-                            part_type=part_type,
-                            created_by=user,
-                            image='default.png',
-                        )
-                        part.laptop_model.add(laptop.id)
-                    # Check if new image is given and if existing image is default, if so then overwrite
-                    if not is_member(user, "admin"):
-                        if model_image and "/default.png" in part.image.url.lower():
-                            if valid_file_extension(model_image.name):
-                                if model_image.size > settings.MAX_UPLOAD_SIZE:
-                                    messages.debug(request, f"{model_number} image too large. Choose a new image or notify administrator.")
-                                    error = True
+                        try:
+                            part = Part.objects.get(model=model_number)
+                        except:
+                            part = Part.objects.create(
+                                model=model_number,
+                                part_type=part_type,
+                                created_by=user,
+                                image='default.png',
+                            )
+                            part.laptop_model.add(laptop.id)
+                        # Check if new image is given and if existing image is default, if so then overwrite
+                        if not is_member(user, "admin"):
+                            if model_image and "/default.png" in part.image.url.lower():
+                                if valid_file_extension(model_image.name):
+                                    if model_image.size > settings.MAX_UPLOAD_SIZE:
+                                        messages.debug(request, f"{model_number} image too large. Choose a new image or notify administrator.")
+                                        raise SaveError
+                                    part.image = model_image
+                                    part.save()
+                                else: messages.error(request, f"{model_number} image is not a valid file type. Choose a new image or notify administrator.")
+                                raise SaveError
+                        else:
+                            if model_image and valid_file_extension(model_image.name):
                                 part.image = model_image
                                 part.save()
-                            else: messages.error(request, f"{model_number} image is not a valid file type. Choose a new image or notify administrator.")
-                    else:
-                        if model_image and valid_file_extension(model_image.name):
-                            part.image = model_image
-                            part.save()
-                        elif not valid_file_extension(model_image.name):
-                            messages.error(request, f"{model_number} image is not a valid file type. Choose a new image.")
-                            error = True
-                        
-                except Exception as e:
-                    print(e)
-                    messages.error(request, f"Unable to add model number: {model_number} with part type: {part_type}. Check info or notify administrator.")
-
-                try:
-                    part = Part.objects.filter(model=model_number).filter(laptop_model=laptop.id)
-                    if not part:
-                        part.laptop_model.add(laptop.id)
-                except Exception as e:
-                    print(e)
-                    messages.error(request, f"Unable to link model number: {model_number} to laptop: {laptop_model}. Check info or notify administrator.")
-                    error = True
-            
-        if not error:
-            messages.success(request, "Thank you for adding to our database.")
-            return redirect(f"/laptop/{laptop_model}")
+                            elif not valid_file_extension(model_image.name):
+                                messages.error(request, f"{model_number} image is not a valid file type. Choose a new image.")
+                                raise SaveError
+                            
+                    except Exception as e:
+                        print(e)
+                        messages.error(request, f"Unable to add model number: {model_number} with part type: {part_type}. Check info or notify administrator.")
+                        raise SaveError
+                    try:
+                        part = Part.objects.filter(model=model_number).filter(laptop_model=laptop.id)
+                        if not part:
+                            part.laptop_model.add(laptop.id)
+                    except Exception as e:
+                        print(e)
+                        messages.error(request, f"Unable to link model number: {model_number} to laptop: {laptop_model}. Check info or notify administrator.")
+                        raise SaveError
+        except SaveError:
+            return render(request, 'base/edit-laptop.html', {"laptop": laptop})    
+        
+        messages.success(request, "Thank you for adding to our database.")
+        return redirect(f"/laptop/{laptop_model}")
 
     forms = []
-
+    
     # Check is user is a mod. If so show all form fields, if not show only blank fields
     part_types_list = list(part_types.keys())
     part_types_full_names_list = list(part_types.values())
@@ -393,7 +415,7 @@ def edit_laptop(request, laptop_model):
     
     form_data = zip(forms, used_part_types_full_names_list, used_part_types_list)
 
-    return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'form_data': form_data})
+    return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'laptop_image_url': laptop.image.url, 'form_data': form_data})
 
 # Basic users can only edit missing laptop parts
 def user_add_laptop_data(request, laptop_model):

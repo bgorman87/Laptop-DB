@@ -38,9 +38,16 @@ def part_downvoted(part, user):
     else:
         return ""
 
-@register.filter(name="verified")
-def verified(laptop):
+@register.filter(name="laptop_verified")
+def laptop_verified(laptop):
     if laptop.verified:
+        return "fa fa-solid fa-circle-check icon verified"
+    else:
+        return ""
+
+@register.filter(name="part_verified")
+def part_verified(part):
+    if part.verified:
         return "fa fa-solid fa-circle-check icon verified"
     else:
         return ""

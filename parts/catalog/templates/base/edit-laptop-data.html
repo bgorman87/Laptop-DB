@@ -1,13 +1,24 @@
 {% extends 'main.html' %}
-
+{% load auth_extras %}
 {% block content %}
 
 <div class='add-parts container'>
     <div class='mx-auto'>
         <form class="form" name="parts-form" method="POST" enctype="multipart/form-data">
+            <div class="input-group mb-1">
+                <span class="input-group-text form-span" id="id_{{laptop_model}}">Laptop Model</span>
+                <span class="form-control" name="laptop_model" id="id_{{laptop_model}}" aria-describedby="laptop_model">{{laptop_model}}</span>
+            </div>
             <div class="input-group mb-3">
-                <span class="input-group-text form-span" id="id_{{laptop_model}}"> Laptop: </span>
-                <input type="text" class="form-control input-field" value="{{laptop_model}}" name="laptop_model" id="id_{{laptop_model}}" aria-describedby="laptop_model" disabled readonly>
+                {% if request.user|has_group:"admin" %}
+                    {% if "default" in laptop_image_url|lower %}
+                        <input type="file" onchange="validateSize(this)" class="form-control input-group-file" name="laptop-image" id="id_{{laptop_model}}-image">
+                    {% else %}
+                        <input type="file" onchange="validateSize(this)" class="form-control input-group-file" value="{{form.image.url}}" name="{{part_type}}-image" id="id_{{part_type}}-image" accept="image/*">
+                        <span class="input-group-text form-span">Currently</span>
+                        <a readonly class="input-group-text form-span" href="{{laptop_image_url}}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-original-title="<img class='tooltip-img' src='{{laptop_image_url}}'/><p>Click for hi-res</p>">Laptop Image</a>
+                    {% endif %}
+                {% endif %}
             </div>
             {% csrf_token %}
             {% for form, part_title, part_type in form_data %}
@@ -25,7 +36,7 @@
                     {% else %}
                         <input type="file" onchange="validateSize(this)" class="form-control input-group-file" value="{{form.image.url}}" name="{{part_type}}-image" id="id_{{part_type}}-image" accept="image/*">
                         <span class="input-group-text form-span">Currently</span>
-                        <a readonly class="input-group-text form-span" href="/images/{{form.image.value}}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-original-title="<img class='tooltip-img' src='{{form.image.url}}'/><p>Click for hi-res</p>">{{part_title}}&nbspImage</a>
+                        <a readonly class="input-group-text form-span" href="{{form.image.url}}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" data-bs-original-title="<img class='tooltip-img' src='{{form.image.url}}'/><p>Click for hi-res</p>">{{part_title}}&nbspImage</a>
                     {% endif %}
                 </div>
             {% endfor %}

@@ -1,25 +1,37 @@
+{% load auth_extras %}
+{% load vote_extras %}
+
 <div class="card item-card">
     <div class="view overlay m-3">
+        <div class="container-flex-row">
         {% if item_type == "part" %}
-            <a href="{% url 'item-page' item %}" class="text-decoration-none dark-grey-text m4-2">
-                {% if 'KEYB' in item.part_type %}
-                <h5>{{ item }}<img class="flag2x" src="{{ item.country_id.flag }}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ item.country_id.name }}"/> </h5>
-                {% else %}
-                    <h5>{{ item }}</h5>
-                {% endif %}
-        {% else %}
+            <i class="{{ item|part_verified }}" aria-hidden="true"></i>
+            {% if 'KEYB' in item.part_type %}
+                <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x mx-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/>
+            {% else %}
+                <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a>
+            {% endif %}
             
-            <a href="{% url 'laptop-page' item %}" class="text-decoration-none dark-grey-text m4-2">
-            <h4>{{ item.manufacturer }}&nbsp{{ item.series }}</h4>
-            <h5>{{ item }}</h5>
-        {% endif %}
-        </a>
-        {% if item_type == "part" %}
-        <a class="image-item mt-1" href="{% url 'item-page' item %}">
+            {% csrf_token %}                                         
+            <i id="part-upvote-{{item.id}}" class="fa fa-arrow-up part-upvote-click {{ item|part_upvoted:request.user }}" data-answer="{{item.id}}"></i>
+            <span class="part-score-count-{{item.id}}">{{item.score}}</span>
+            <i id="part-downvote-{{item.id}}" class="fa fa-arrow-down part-downvote-click {{ item|part_downvoted:request.user }}" data-answer="{{item.id}}"></i>
+            <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{item.model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
         {% else %}
-        <a class="image-item mt-1" href="{% url 'laptop-page' item %}">
+            <i class="{{ item|laptop_verified }}" aria-hidden="true"></i>    
+            <a class="dark-grey-text mx-1" href="{% url 'laptop-page' item.laptop_model %}">{{item.manufacturer}}&nbsp{{item.series}}&nbsp({{item.laptop_model}})</a>
+            <i id="laptop-upvote-{{item.id}}" class="fa fa-arrow-up laptop-upvote-click {{ item|laptop_upvoted:request.user }}" data-answer="{{item.id}}"></i>
+            <span class="laptop-score-count-{{item.id}}">{{item.score}}</span>
+            <i id="laptop-downvote-{{item.id}}" class="fa fa-arrow-down laptop-downvote-click {{ item|laptop_downvoted:request.user }}" data-answer="{{item.id}}"></i>
+            <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{item.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
         {% endif %}
-            <img src="{{ item.image.url }}" class="card-img-top"/>
+        </div>
+        {% if item_type == "part" %}
+        <a class="image-item" href="{% url 'item-page' item %}">
+        {% else %}
+        <a class="image-item" href="{% url 'laptop-page' item %}">
+        {% endif %}
+            <img src="{{ item.image.url }}" class="card-img-top mt-3" />
         </a>
     </div>
 
@@ -35,19 +47,25 @@
                 </div>
             {% endif %}
         <strong>
-            <ul class="card-body-ul">
+            <ul class="card-body-ul small mb-5">
             {% for laptop in item.laptop_model.all %}
-                <li><a href="{% url 'laptop-page' laptop.laptop_model %}" class="text-decoration-none dark-grey-text">{{ laptop.laptop_model }}</a></li>
+
+                <div class="container-flex-col">
+                    <i class="{{ laptop|laptop_verified }}" aria-hidden="true"></i>    
+                    <a class="text-decoration-none dark-grey-text mx-1" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.laptop_model}}</a>
+                    <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                    <span class="laptop-score-count-{{laptop.id}}">{{laptop.score}}</span>
+                    <i id="laptop-downvote-{{laptop.id}}" class="fa fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                    <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{laptop.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
+                </div>
+
             {% endfor %}
             </ul>
         </strong>
         </h5>
-    </div>
-    <div class="mx-auto my-0 grey-text card-submission-details ">
-        <span>Added {{item.created|timesince}} ago</span>
-        
-    </div>
-    <div class="mx-auto my-0 grey-text card-submission-details ">
-        <span>Submitted by @{{item.created_by}}</span>
+
+        <span class="mx-auto my-0 grey-text card-submission-details">Added {{item.created|timesince}} ago</span>
+        <span class="mx-auto my-0 grey-text card-submission-details">Submitted by @{{item.created_by}}</span>
+
     </div>
 </div>

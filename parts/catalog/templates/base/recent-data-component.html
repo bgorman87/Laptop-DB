@@ -1,9 +1,9 @@
 <section class="text-center">
-    <div class="dark-grey-text text-center m-3 fw-bold">
+    <div class="dark-grey-text text-center fw-bold">
         <strong><h2>Recent Parts</h2></strong>
     </div>
     <hr></hr>
-    <div class="row wow fadeIn">
+    <div class="row wow fadeIn row-container p-3">
       {% for items, item_type in part_results %}
         {% for item in items %}
         <div class="col-lg-3 col-md-6 mb-4">
@@ -13,11 +13,11 @@
       {% endfor %}
     </div>
     
-    <div class="dark-grey-text text-center m-3 mt-5 fw-bold">
+    <div class="dark-grey-text text-center mt-5 fw-bold">
       <strong><h2>Recent Laptops</h2></strong>
     </div>
     <hr></hr>
-    <div class="row wow fadeIn">
+    <div class="row wow fadeIn row-container p-3">
     
       {% for items, item_type in laptop_results %}
         {% for item in items %}

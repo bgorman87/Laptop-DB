@@ -159,11 +159,13 @@ body {
     margin-left: 0.25rem;
 }
 
-.image-item > img {
-    border-radius: 2%;
-    max-height: 30vh;
-    min-height: 25vh;
+.image-item > .img {
+    max-height: 20vh;
+    min-height: 15vh;
     object-fit: contain;
+    margin: auto;
+
+    border-radius: 5px;
 }
 
 .input-group-text, .input-group-file::file-selector-button {

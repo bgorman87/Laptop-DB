@@ -44,10 +44,14 @@
                       </select>
                 </div>
 
-                <div class="input-group mb-2">
-                    <input id="image-input" type="file" onchange="validateSize(this)" class="form-control input-group-file" name="laptop-image" id="id_laptop-image">
+                <div class="input-group mb-0">
+                    <label class="input-group-text" for="image-input">Image</label>
+                    <input id="image-input" type="file" onchange="validateSize(this)" class="form-control input-group-file mx-0 px-0" name="laptop-image" id="id_laptop-image">
                 </div>
-                <div class="form-outline mb-4">
+                <div class="small text-muted mt-0 mb-2">
+                    <span>Image must be of type .png, .jpg, .jpeg, or .gif and less than 2.5MiB</span>
+                </div>
+                <div class="form-outline mt-3">
                     <button class="btn btn-dark btn-block w-100" type="submit" id="submit-button">Submit</button>
                 </div>
             </form>

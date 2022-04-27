@@ -1,29 +1,64 @@
 {% extends 'main.html' %}
-
+{% load auth_extras %}
+{% load vote_extras %}
 {% block content %}
     <main>
         <div class='product'>
             <div class="container">
                 <div class="container-flex-row">
                     <div class="container-flex-row">
-                        <div class="container-flex-col">
-                            <div class="title-item dark-grey-text">
-                                <strong><h4>{{model_name}} Model: {{model_number}}</h4></strong>
+                        <div class="container-flex-col mx-auto ml-1">   
+                            <div class="container-flex-row title-item dark-grey-text h5">
+                                <div class="container-flex-col mx-1">
+                                    {% csrf_token %}
+                                    <i id="part-upvote-{{part.id}}" class="fa fa-arrow-up part-upvote-click {{ part|part_upvoted:request.user }}" data-answer="{{part.id}}"></i>
+                                    <span class="part-score-count-{{part.id}}">{{part.score}}</span>
+                                    <i id="part-downvote-{{part.id}}" class="me-1 fa fa-arrow-down part-downvote-click {{ part|part_downvoted:request.user }}" data-answer="{{part.id}}"></i>
+                                </div>
+                                <div class="container-flex-col mx-1">
+                                    <strong><h4>{{model_name}} Model: {{model_number}}</h4></strong>
+                                </div>
+                                <div class="container-flex-col mx-1">
+                                    <i class="{{ part|part_verified }}" aria-hidden="true"></i>
+                                </div>
+                                <div class="container-flex-col mx-3">
+                                    <button class="btn options-btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fal fa-ellipsis-v grey-text"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li><a class="dropdown-item" href="" disabled>Suggest New Model Number</a></li>
+                                    </ul>
+                                </div> 
                             </div>
-                            <div class="image-item">
-                                <img src="{{part.image.url}}" class="card-img-top"/>
+                            <div class="image-item mb-5">
+                                <img src="{{ part.image.url }}" class="card-img-top"/>
                             </div>
                         </div>
                     </div>
                     <div class="container-flex-row-line">
                     </div>
                     <div class="container-flex-row">
-                        <div class="container-flex-col mx-auto ml-1">
-                            <div class="text-item">
+                        <div class="container-flex-col mx-auto dark-grey-text">
+                            <div class="container-flex-col mx-auto mb-4">
                                 <h5>Associated Laptops:</h5>
-                                {% for laptop in laptops %}
-                                    <ul><a class="grey-text" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.laptop_model}}</a></ul>
-                                {% endfor %}
+                            </div>
+                            <div class="container-flex-col">
+                            {% for laptop in laptops %}
+                                <div class="container-flex-row dark-grey-text">
+                                    <ul><a class="dark-grey-text mx-1" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})</a></ul>
+                                
+                                    <div class="container-flex-col mx-1">
+                                        <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                                    </div>
+                                    <div class="container-flex-col">
+                                        <span class="laptop-score-count-{{item.id}}">{{laptop.score}}</span>
+                                    </div>
+                                    <div class="container-flex-col mx-1">
+                                        <i id="laptop-downvote-{{laptop.id}}" class="fa fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                                    </div>                                
+                                    <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{laptop.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
+                                </div>
+                            {% endfor %}
                             </div>
                         </div>
                     </div>
