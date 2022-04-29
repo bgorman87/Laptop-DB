@@ -1,31 +1,49 @@
 {% load auth_extras %}
 {% load vote_extras %}
+{% load general_extras %}
 
 <div class="card item-card">
     <div class="view overlay m-3">
-        <div class="container-flex-row">
         {% if item_type == "part" %}
-            <i class="{{ item|part_verified }}" aria-hidden="true"></i>
-            {% if 'KEYB' in item.part_type %}
+            <div class="container-flex-col dark-grey-text mb-3">
+                <h5><strong>{{ item.part_type|part_type }}</strong></h5>
+            </div>
+            <div class="container-flex-col dark-grey-text">
+            {% csrf_token %}
+            <i id="part-upvote-{{item.id}}" class="fa fa-arrow-up part-upvote-click {{ item|part_upvoted:request.user }}" data-answer="{{item.id}}"></i>
+            <span class="part-score-count-{{item.id}}">{{item.score}}</span>
+            <i id="part-downvote-{{item.id}}" class="fa fa-arrow-down part-downvote-click {{ item|part_downvoted:request.user }}" data-answer="{{item.id}}"></i>
+            {% if 'KEYB' in item.part_type and item.country %}
                 <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a><img class="flag2x mx-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{item.country_id.name}}" src="{{item.country_id.flag}}"/>
             {% else %}
                 <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a>
             {% endif %}
-            
-            {% csrf_token %}                                         
-            <i id="part-upvote-{{item.id}}" class="fa fa-arrow-up part-upvote-click {{ item|part_upvoted:request.user }}" data-answer="{{item.id}}"></i>
-            <span class="part-score-count-{{item.id}}">{{item.score}}</span>
-            <i id="part-downvote-{{item.id}}" class="fa fa-arrow-down part-downvote-click {{ item|part_downvoted:request.user }}" data-answer="{{item.id}}"></i>
-            <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{item.model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
+            {% if item|part_verified %}
+                <i class="{{ item|part_verified }}" aria-hidden="true"></i>
+            {% endif %}
+            <a class="grey-text mx-1" href="https://www.ebay.com/sch/i.html?_nkw={{item.model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
+            </div>
         {% else %}
-            <i class="{{ item|laptop_verified }}" aria-hidden="true"></i>    
-            <a class="dark-grey-text mx-1" href="{% url 'laptop-page' item.laptop_model %}">{{item.manufacturer}}&nbsp{{item.series}}&nbsp({{item.laptop_model}})</a>
+            <div class="container-flex-row dark-grey-text mb-3">
+                <div class="container-flex-col">
+                    <h5><strong>{{item.manufacturer}}</strong></h5>
+                </div>
+                <div class="container-flex-col">
+                    <h5><strong>{{item.series}}</strong></h5>
+                </div>
+            </div>
+            <div class="container-flex-col dark-grey-text">
             <i id="laptop-upvote-{{item.id}}" class="fa fa-arrow-up laptop-upvote-click {{ item|laptop_upvoted:request.user }}" data-answer="{{item.id}}"></i>
             <span class="laptop-score-count-{{item.id}}">{{item.score}}</span>
             <i id="laptop-downvote-{{item.id}}" class="fa fa-arrow-down laptop-downvote-click {{ item|laptop_downvoted:request.user }}" data-answer="{{item.id}}"></i>
-            <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{item.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
+            <a class="dark-grey-text mx-1 text-break" href="{% url 'laptop-page' item.laptop_model %}">{{item.laptop_model}}</a>
+            {% if item|laptop_verified %}
+                <i class="{{ item|laptop_verified }}" aria-hidden="true"></i>
+            {% endif %}
+            <a class="grey-text mx-1" href="https://www.ebay.com/sch/i.html?_nkw={{item.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
+            </div>  
         {% endif %}
-        </div>
+        
         {% if item_type == "part" %}
         <a class="image-item" href="{% url 'item-page' item %}">
         {% else %}
@@ -50,12 +68,12 @@
             <ul class="card-body-ul small mb-5">
             {% for laptop in item.laptop_model.all %}
 
-                <div class="container-flex-col">
-                    <i class="{{ laptop|laptop_verified }}" aria-hidden="true"></i>    
-                    <a class="text-decoration-none dark-grey-text mx-1" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.laptop_model}}</a>
+                <div class="container-flex-col dark-grey-text">
                     <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
                     <span class="laptop-score-count-{{laptop.id}}">{{laptop.score}}</span>
-                    <i id="laptop-downvote-{{laptop.id}}" class="fa fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>
+                    <i id="laptop-downvote-{{laptop.id}}" class="fa fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>    
+                    <a class="text-decoration-none dark-grey-text mx-1" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.laptop_model}}</a>
+                    <i class="{{ laptop|laptop_verified }}" aria-hidden="true"></i>
                     <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{laptop.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
                 </div>
 
