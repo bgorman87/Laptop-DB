@@ -212,3 +212,38 @@ class LaptopVote(models.Model):
 
     class Meta:
         unique_together = ('user', 'laptop')
+
+# Model to store part_model changes for admins to review and approve
+class PartModelChange(models.Model):
+    part = models.ForeignKey(Part, on_delete=models.CASCADE)
+    old_model = models.CharField(max_length=200, null=True, blank=True)
+    new_model = models.CharField(max_length=200, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    approved = models.BooleanField(default=False)
+    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='part_change_approved_by')
+    approved_date = models.DateTimeField(null=True, blank=True)
+    rejected_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='part_change_rejected_by')
+    rejected_date = models.DateTimeField(null=True, blank=True)
+    rejected_reason = models.CharField(max_length=200, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-updated', '-created']
+
+class LaptopModelChange(models.Model):
+    laptop = models.ForeignKey(Laptop, on_delete=models.CASCADE)
+    old_model = models.CharField(max_length=200, null=True, blank=True)
+    new_model = models.CharField(max_length=200, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    approved = models.BooleanField(default=False)
+    approved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='laptop_change_approved_by')
+    approved_date = models.DateTimeField(null=True, blank=True)
+    rejected_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='laptop_change_rejected_by')
+    rejected_date = models.DateTimeField(null=True, blank=True)
+    rejected_reason = models.CharField(max_length=200, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-updated', '-created']

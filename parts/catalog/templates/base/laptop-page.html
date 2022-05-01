@@ -32,7 +32,7 @@
                                         <li><a class="dropdown-item" href="{% url 'edit-laptop' laptop.laptop_model %}">Add Components</a></li>
                                         {% endif %}
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="" disabled>Suggest New Model Number</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'laptop-model-change' laptop.laptop_model %}" disabled>Suggest New Model Number</a></li>
                                     </ul>
                                 </div> 
                             </div>

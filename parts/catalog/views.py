@@ -417,6 +417,7 @@ def edit_laptop(request, laptop_model):
 
     return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'laptop_image_url': laptop.image.url, 'form_data': form_data})
 
+@login_required(login_url='login-page')
 # Basic users can only edit missing laptop parts
 def user_add_laptop_data(request, laptop_model):
 
@@ -454,6 +455,7 @@ def part_upvote(request):
         messages.info(request, "You must be logged in to vote.")
         return redirect('login-page', next=request.path)
 
+@login_required(login_url='login-page')
 def part_downvote(request):
     user = request.user
     if user.is_authenticated:
@@ -470,6 +472,7 @@ def part_downvote(request):
         messages.info(request, "You must be logged in to vote.")
         return redirect('login-page', next=request.path)
 
+@login_required(login_url='login-page')
 def laptop_upvote(request):
     user = request.user
     if user.is_authenticated:
@@ -487,6 +490,7 @@ def laptop_upvote(request):
         messages.info(request, "You must be logged in to vote.")
         return redirect('login-page', next=request.path)
 
+@login_required(login_url='login-page')
 def laptop_downvote(request):
     user = request.user
     if user.is_authenticated:
@@ -503,3 +507,101 @@ def laptop_downvote(request):
         messages.info(request, "You must be logged in to vote.")
         return redirect('login-page', next=request.path)
 
+@login_required(login_url='login-page')
+def part_model_change(request, part_model):
+    
+    part_model_change_form = ModelChangeForm()
+    part_model_change_form.fields['current_model'].initial = part_model
+
+    if request.method == "POST":
+        
+        suggested_part_model = request.POST.get("suggested_model")
+        print(f"current: {part_model} -- suggested: {suggested_part_model}")
+
+        if suggested_part_model == part_model:
+            messages.info(request, "You cannot change to the same model.")
+            return render(request, "base/new-model-suggest.html", {'model_change_form': part_model_change_form, "model": part_model})
+
+        try:
+            part = Part.objects.get(model=part_model)
+        except:
+            messages.error(request, "Part model not found.")
+            return render(request, "base/new-model-suggest.html", {'model_change_form': part_model_change_form, "model": part_model})
+        
+        try:
+            suggested_part = Part.objects.get(model=suggested_part_model)
+            messages.info(request, "Part model already exists. Redirected to page.")
+            return redirect('item-page', model_number=suggested_part_model)
+        except:
+            pass
+
+        try:
+            part_model_change = PartModelChange.objects.filter(part=part).filter(old_model=part_model).filter(new_model=suggested_part_model)
+            if part_model_change.exists():
+                print("already exists")
+                if not part_model_change[0].approved:
+                    if not part_model_change[0].rejected_by and not part_model_change[0].approved_by:
+                        messages.error(request, "This change has already been suggested for this model. Please wait for mods to review.")
+                        return redirect('item-page', model_number=part_model)
+                    messages.error(request, "This part model change has already been suggested and was denied after review by mods. Please contact an administrator if you believe this to be an error.")
+                    return redirect('item-page', model_number=part_model)
+                messages.success(request, "This part model change has already been suggested and was approved after review by mods. Please contact an administrator if you believe this to be an error.")
+                return redirect('item-page', model_number=part_model)
+        except:
+            pass
+
+
+        PartModelChange.objects.create(part=part, old_model=part_model, new_model=suggested_part_model, created_by=request.user)
+        messages.success(request, "Thank you for the model change suggestion. Mods will review and approve this change if appropriate.")
+        return redirect('item-page', model_number=part_model)
+    
+    return render(request, "base/new-model-suggest.html", {'model_change_form': part_model_change_form, 'model': part_model})
+
+@login_required(login_url='login-page')
+def laptop_model_change(request, laptop_model):
+        
+    laptop_model_change_form = ModelChangeForm()
+    laptop_model_change_form.fields['current_model'].initial = laptop_model
+
+    if request.method == "POST":
+        
+        suggested_laptop_model = request.POST.get("suggested_model")
+        print(f"current: {laptop_model} -- suggested: {suggested_laptop_model}")
+
+        if suggested_laptop_model == laptop_model:
+            messages.info(request, "You cannot change to the same model.")
+            return render(request, "base/new-model-suggest.html", {'model_change_form': laptop_model_change_form, "model": laptop_model})
+
+        try:
+            laptop = Laptop.objects.get(laptop_model=laptop_model)
+        except:
+            messages.error(request, "Laptop model not found.")
+            return render(request, "base/new-model-suggest.html", {'model_change_form': laptop_model_change_form, "model": laptop_model})
+        
+        try:
+            suggested_laptop = Laptop.objects.get(laptop_model=suggested_laptop_model)
+            messages.info(request, "Laptop model already exists. Redirected to page.")
+            return redirect('laptop-page', laptop_model=suggested_laptop_model)
+        except:
+            pass
+
+        try:
+            laptop_model_change = LaptopModelChange.objects.filter(laptop=laptop).filter(old_model=laptop_model).filter(new_model=suggested_laptop_model)
+            if laptop_model_change.exists():
+                print("already exists")
+                if not laptop_model_change[0].approved:
+                    if not laptop_model_change[0].rejected_by and not laptop_model_change[0].approved_by:
+                        messages.error(request, "This change has already been suggested for this model. Please wait for mods to review.")
+                        return redirect('laptop-page', laptop_model=laptop_model)
+                    messages.error(request, "This laptop model change has already been suggested and was denied after review by mods. Please contact an administrator if you believe this to be an error.")
+                    return redirect('laptop-page', laptop_model=laptop_model)
+                messages.success(request, "This laptop model change has already been suggested and was approved after review by mods. Please contact an administrator if you believe this to be an error.")
+                return redirect('laptop-page', laptop_model=laptop_model)
+        except:
+            pass
+
+        LaptopModelChange.objects.create(laptop=laptop, old_model=laptop_model, new_model=suggested_laptop_model, created_by=request.user)
+        messages.success(request, "Thank you for the model change suggestion. Mods will review and approve this change if appropriate.")
+        return redirect('laptop-page', laptop_model=laptop_model)
+
+    return render(request, "base/new-model-suggest.html", {'model_change_form': laptop_model_change_form, 'model': laptop_model})

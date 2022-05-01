@@ -28,11 +28,23 @@ class PartVoteAdmin(admin.ModelAdmin):
     list_filter = ('part', 'user', 'vote_type')
     search_fields = ('user', 'part', 'vote_type')
 
-class LapVoteAdmin(admin.ModelAdmin):
+class LaptopVoteAdmin(admin.ModelAdmin):
     list_display = ('user', 'laptop', 'vote_type', 'created')
     list_filter = ('user', 'laptop', 'vote_type')
     search_fields = ('user', 'laptop', 'vote_type')
 
 admin.site.register(PartVote, PartVoteAdmin)
-admin.site.register(LaptopVote, LapVoteAdmin)
+admin.site.register(LaptopVote, LaptopVoteAdmin)
 
+class PartChangeAdmin(admin.ModelAdmin):
+    list_display = ('part', 'old_model', 'new_model', 'created_by', 'created', 'updated', 'approved', 'approved_by', 'rejected_by', "rejected_reason")
+    list_filter = ('part', 'old_model', 'new_model', 'created_by', 'approved', 'approved_by', 'rejected_by')
+    search_fields = ('part', 'old_model', 'new_model', 'created_by', 'approved', 'approved_by', 'rejected_by')
+
+class LaptopChangeAdmin(admin.ModelAdmin):
+    list_display = ('laptop', 'old_model', 'new_model', 'created_by', 'created', 'updated', 'approved', 'approved_by', 'rejected_by', "rejected_reason")
+    list_filter = ('laptop', 'old_model', 'new_model', 'created_by', 'approved', 'approved_by', 'rejected_by')
+    search_fields = ('laptop', 'old_model', 'new_model', 'created_by', 'approved', 'approved_by', 'rejected_by')
+
+admin.site.register(PartModelChange, PartChangeAdmin)
+admin.site.register(LaptopModelChange, LaptopChangeAdmin)

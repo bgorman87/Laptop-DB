@@ -1,0 +1,38 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<section class="suggest-model">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="card model-change-card" style="border-radius: 1rem;">
+                <div class="d-flex align-items-center">
+                    <div class="card-body p-4 p-lg-5 text-black">
+                        <form method="POST" action="">
+                            {% csrf_token %}
+
+                            <div class="d-flex align-items-center ml-0 mb-3 pb-1">
+                                <span class="h1 fw-bold mb-0">Model Change Suggestion</span>
+                            </div>
+
+                            <div class="form-outline mb-4 input-group">
+                                <span class="input-group-text form-span" id="id_current_model">Current</span>
+                                {{model_change_form.current_model}}
+                            </div>
+
+                            <div class="form-outline mb-4 input-group">
+                                <span class="input-group-text form-span" id="id_suggested_model">Suggested</span>
+                                {{model_change_form.suggested_model}}
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <button class="btn btn-dark btn-block w-100" type="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

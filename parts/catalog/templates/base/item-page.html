@@ -26,7 +26,7 @@
                                         <i class="fa fal fa-ellipsis-v grey-text"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a class="dropdown-item" href="" disabled>Suggest New Model Number</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'part-model-change' part.model %}">Suggest New Model Number</a></li>
                                     </ul>
                                 </div> 
                             </div>
@@ -45,8 +45,6 @@
                             <div class="container-flex-col">
                             {% for laptop in laptops %}
                                 <div class="container-flex-row dark-grey-text">
-                                    <ul><a class="dark-grey-text mx-1" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})</a></ul>
-                                
                                     <div class="container-flex-col mx-1">
                                         <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
                                     </div>
@@ -55,7 +53,10 @@
                                     </div>
                                     <div class="container-flex-col mx-1">
                                         <i id="laptop-downvote-{{laptop.id}}" class="fa fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>
-                                    </div>                                
+                                    </div> 
+                                    
+                                    <ul><a class="dark-grey-text mx-1" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})</a></ul>
+                             
                                     <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{laptop.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
                                 </div>
                             {% endfor %}

@@ -14,4 +14,6 @@ urlpatterns = [
     path('laptop-upvote/', views.laptop_upvote, name='laptop-upvote'),
     path('laptop-downvote/', views.laptop_downvote, name='laptop-downvote'),
     path('part-downvote/', views.part_downvote, name='part-downvote'),
+    path('part-model-change/<str:part_model>', views.part_model_change, name='part-model-change'),
+    path('laptop-model-change/<str:laptop_model>', views.laptop_model_change, name='laptop-model-change'),
 ]

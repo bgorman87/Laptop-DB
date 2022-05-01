@@ -29,3 +29,11 @@ class PartForm(ModelForm):
 
 
         
+class ModelChangeForm(forms.Form):
+    current_model = forms.CharField(label="Current", max_length=100)
+    suggested_model = forms.CharField(label="Suggested", max_length=100)
+
+    def __init__(self, *args, **kwargs):
+        super(ModelChangeForm, self).__init__(*args, **kwargs)
+        self.fields['current_model'].widget.attrs.update({'class' : 'form-control', "disabled" : "disabled"})
+        self.fields['suggested_model'].widget.attrs.update({'class' : 'form-control input-field', "placeholder" : "Required"})

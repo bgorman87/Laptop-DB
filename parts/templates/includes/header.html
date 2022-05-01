@@ -1,3 +1,7 @@
+{% load general_extras %}
+{% load auth_extras %}
+{% load admin_urls %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container">
     <a class="navbar-brand" href="{% url 'home' %}">
@@ -13,19 +17,50 @@
         </form>
       </div>
 
-      <div class="navbar-nav">
-        <a class="nav-link" aria-current="page" href={% url 'add-laptop' %}> Add Laptop </a>
+      <ul class="navbar-nav">
+        <li><a class="nav-link m-0" aria-current="page" href={% url 'add-laptop' %}> Add Laptop </a></li>
+
         {% if request.user.is_authenticated %}
-          <a class="nav-link" aria-current="page" href="{% url 'profile-page' user.username %}">{{user.username}}</a>
+          <li class="nav-link dropdown m-0">
+            <a class="nav-link" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="nav-link">{{user.username}}
+              {% if user|notifications > 0 %}
+                <span class="badge bg-danger">{{user|notifications}}</span>
+              {% endif %}
+              </span>
+            </a>
+            <ul class="dropdown-menu mt-2" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item m-0" href="{% url 'profile-page' request.user %}">Profile Page</a></li>
+              {% if request.user|has_group:"mod" %}
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'admin:catalog_partmodelchange_changelist' %}">
+                  Part Change Requests
+                  {% if user|part_change_requests > 0 %}
+                    <span class="badge bg-danger">{{user|part_change_requests}}</span>
+                  {% else %}
+                    <span class="badge bg-secondary">0</span>
+                  {% endif %}
+                </a></li>
+                <li><a class="dropdown-item" href="{% url 'admin:catalog_laptopmodelchange_changelist' %}">
+                  Laptop Change Requests
+                  {% if user|laptop_change_requests > 0 %}
+                    <span class="badge bg-danger">{{user|laptop_change_requests}}</span>
+                  {% else %}
+                    <span class="badge bg-secondary">0</span>
+                  {% endif %}
+                </a></li>
+              {% endif %}
+            </ul>
+          </li>
         {% endif %}
         
         {% if request.user.is_authenticated %}
-          <a class="nav-link" aria-current="page" href="{% url 'logout-page' %}"> Logout </a>
+          <li><a class="nav-link m-0" aria-current="page" href="{% url 'logout-page' %}"> Logout </a></li>
         {% else %}
-          <a class="nav-link waves-effect" href="{% url 'login-page' %}"> Login </a>
-          <a class="nav-link waves-effect" href="{% url 'register-page' %}"> Signup </a>
+          <li><a class="nav-link waves-effect m-0" href="{% url 'login-page' %}"> Login </a></li>
+          <li><a class="nav-link waves-effect m-0" href="{% url 'register-page' %}"> Signup </a></li>
         {% endif %}
-      </div>
+        </ul>
     </div>
   </div>
 </nav>
