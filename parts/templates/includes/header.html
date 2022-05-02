@@ -31,7 +31,7 @@
               <li><a class="dropdown-item m-0" href="{% url 'profile-page' request.user %}">Profile Page</a></li>
               {% if request.user|has_group:"mod" %}
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{% url 'admin:catalog_partmodelchange_changelist' %}">
+                <li><a class="dropdown-item" href="{% url 'requested-part-changes' %}">
                   Part Change Requests
                   {% if user|part_change_requests > 0 %}
                     <span class="badge bg-danger">{{user|part_change_requests}}</span>
@@ -39,7 +39,7 @@
                     <span class="badge bg-secondary">0</span>
                   {% endif %}
                 </a></li>
-                <li><a class="dropdown-item" href="{% url 'admin:catalog_laptopmodelchange_changelist' %}">
+                <li><a class="dropdown-item" href="{% url 'requested-laptop-changes' %}">
                   Laptop Change Requests
                   {% if user|laptop_change_requests > 0 %}
                     <span class="badge bg-danger">{{user|laptop_change_requests}}</span>

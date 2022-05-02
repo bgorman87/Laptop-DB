@@ -1,0 +1,51 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<section class="suggest-model">
+    <div class="container">
+        <div class="container-flex-row justify-content-center align-items-center h-100">
+            <div class="text-center mx-auto m-5">
+                <span class="h1 fw-bold">Change Review for Part - {{part.old_model}}</span>
+            </div>
+            <div class="card model-change-card mx-auto p-0 mb-1" style="border-radius: 1rem;">
+                <div class="card-body text-black">
+                    <form method="POST" action=''>
+                        {% csrf_token %}
+                        <div class="form-outline input-group mb-2">
+                            <span class="input-group-text" id="id_part_type">Part Type</span>
+                            <span class="form-control" id="id_part_type" readonly>{{part_type}}</span>
+                        </div>
+                        <div class="form-outline input-group mb-2">
+                            <span class="input-group-text" id="id_current_model">Current Model</span>
+                            <span class="form-control" id="id_current_model" readonly>{{part.old_model}}</span>
+                        </div>
+                        <div class="form-outline input-group mb-2">
+                            <span class="input-group-text" id="id_suggested_model">New Model</span>
+                            <span class="form-control" id="id_suggested_model" readonly>{{part.new_model}}</span>
+                        </div>
+                        <div class="form-outline input-group mb-2">
+                            <span class="input-group-text" id="id_suggested_by">Suggested By</span>
+                            <span class="form-control" id="id_suggested_by" readonly>{{part.created_by}}</span>
+                        </div>
+                        <div class="btn-group form-outline input-group mb-2" role="group" aria-label="Approve or Reject toggle button group">
+                            <input type="radio" class="btn-check" name="option" value="approved" id="id_approve" autocomplete="off">
+                            <label class="btn btn-outline-grey approve" for="id_approve">Approve</label>
+                          
+                            <input type="radio" class="btn-check" name="option" id="id_reject" value="rejected" autocomplete="off">
+                            <label class="btn btn-outline-grey reject" for="id_reject" >Reject</label>
+                          </div>
+                        <div class="form-outline input-group mb-2">
+                            <span class="input-group-text">Reason</span>
+                            <input type="text" class="form-control" placeholder="Approval or Rejection Reason..." id="id_reason" name="reason" aria-label="Reason for approval or rejection">
+                        </div>
+                        <div class="form-outline mt-4">
+                            <button class="btn btn-dark btn-block w-100" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

@@ -18,6 +18,13 @@ body {
     width: 50% !important;
 }
 
+.card, .model-change-card {
+    border: solid;
+    border-width: 1px;
+    border-color: #9e9e9eb2;
+    width: 100% !important;
+}
+
 .item-card {
     width: 100% !important;
 }
@@ -174,10 +181,6 @@ body {
     
 }
 
-.container {
-    margin: auto;
-}
-
 .nav-link {
     padding: 0;
 }
@@ -216,7 +219,6 @@ body {
 }
 
 .search-item-result {
-
     background-color: #ccc;
     border-radius: 5px;
 }
@@ -230,3 +232,59 @@ body {
 
 .dark-grey-text {
     color: #4f4f4f !important; }
+
+.btn-outline-grey, .approve, .reject {
+    color: black;
+    border-color: #9e9e9e;
+}
+.btn-outline-grey:hover {
+    color: black;
+    background-color: #9e9e9e;
+    border-color: #9e9e9e;
+}
+
+.approve:hover {
+    background-color: rgb(76, 185, 55);
+}
+
+.reject:hover {
+    background-color:rgb(255, 128, 128);
+}
+
+.btn-check:focus + .btn-outline-grey, .btn-outline-grey:focus {
+    box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.5);
+}
+.btn-check:checked + .btn-outline-grey, .btn-check:active + .btn-outline-grey, .btn-outline-grey:active, .btn-outline-grey.active, .btn-outline-grey.dropdown-toggle.show {
+    color: black;
+    background-color: #9e9e9e;
+    border-color: #9e9e9e;
+}
+
+.btn-check:checked + .approve, .btn-check:active + .approve, .approve:active, .approve.active, .approve.dropdown-toggle.show {
+    background-color: rgb(76, 185, 55);
+    border-color: rgb(76, 185, 55);
+}
+
+.btn-check:checked + .reject, .btn-check:active + .reject, .reject:active, .reject.active, .reject.dropdown-toggle.show {
+    background-color: rgb(255, 128, 128);
+    border-color: rgb(255, 128, 128);
+}
+
+.btn-check:checked + .btn-outline-grey:focus, .btn-check:active + .btn-outline-grey:focus, .btn-outline-grey:active:focus, .btn-outline-grey.active:focus, .btn-outline-grey.dropdown-toggle.show:focus {
+    box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.5);
+}
+
+.btn-outline-grey:disabled, .btn-outline-grey.disabled {
+    color: #9e9e9e;
+    background-color: transparent;
+}
+
+.approve:disabled, .approve.disabled {
+    color: #9e9e9e;
+    background-color: transparent;
+}
+
+.reject:disabled, .reject.disabled {
+    color: #9e9e9e;
+    background-color: transparent;
+}

@@ -16,4 +16,8 @@ urlpatterns = [
     path('part-downvote/', views.part_downvote, name='part-downvote'),
     path('part-model-change/<str:part_model>', views.part_model_change, name='part-model-change'),
     path('laptop-model-change/<str:laptop_model>', views.laptop_model_change, name='laptop-model-change'),
+    path('requested-part-changes', views.requested_part_changes, name='requested-part-changes'),
+    path('requested-part-change-review/<int:part_model_change_id>', views.requested_part_change_review, name='requested-part-change-review'),
+    path('requested-laptop-changes', views.requested_laptop_changes, name='requested-laptop-changes'),
+    path('requested-laptop-change-review/<int:laptop_model_change_id>', views.requested_laptop_change_review, name='requested-laptop-change-review'),
 ]
