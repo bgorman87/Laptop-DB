@@ -15,10 +15,12 @@
                         <a class="text-decoration-none form-outline input-group" href="{% url 'requested-laptop-change-review' laptop.id %}">
                             <span class="input-group-text" id="id_current_model">Laptop</span>
                             <span class="form-control me-3" id="id_current_model">{{laptop.old_model}}</span>
-                            <span class="input-group-text" id="id_current_model">Suggested</span>
-                            <span class="form-control me-3" id="id_current_model">{{laptop.new_model}}</span>
-                            <span class="input-group-text me-3" id="id_current_model">{{laptop.created_by}}</span>
-                            <span class="input-group-text" id="id_current_model">{{laptop.created}}</span>
+                            <span class="input-group-text" id="id_suggested_model">Suggested</span>
+                            <span class="form-control me-3" id="id_suggested_model">{{laptop.new_model}}</span>
+                            <span class="input-group-text" id="id_submitted_by">Submitted By</span>
+                            <span class="form-control me-3" id="id_submitted_by">{{laptop.created_by}}</span>
+                            <span class="input-group-text" id="id_submitted_date">Submitted Date</span>
+                            <span class="form-control me-3" id="id_submitted_date">{{laptop.created}}</span>
                         </a>
                         </div>
                     </form>
