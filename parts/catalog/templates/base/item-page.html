@@ -27,6 +27,10 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li><a class="dropdown-item" href="{% url 'part-model-change' part.model %}">Suggest New Model Number</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        {% if request.user|has_group:"admin" %}
+                                        <li><a class="dropdown-item" href="{% url 'confirm-delete-part' part.id %}"><span class="fa fa-trash"></span>&nbsp Delete Part</a></li>
+                                        {% endif %}
                                     </ul>
                                 </div> 
                             </div>

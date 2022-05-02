@@ -8,7 +8,7 @@
                 <div class="container-flex-row">
                     <div class="container-flex-row">
                         <div class="container-flex-col mx-auto ml-1">   
-                            <div class="container-flex-row title-item dark-grey-text h5">
+                            <div class="container-flex-row title-item dark-grey-text h5 mx-auto">
                                 <div class="container-flex-col mx-1">
                                     {% csrf_token %}
                                     <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
@@ -32,7 +32,11 @@
                                         <li><a class="dropdown-item" href="{% url 'edit-laptop' laptop.laptop_model %}">Add Components</a></li>
                                         {% endif %}
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{% url 'laptop-model-change' laptop.laptop_model %}" disabled>Suggest New Model Number</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'laptop-model-change' laptop.laptop_model %}">Suggest New Model Number</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        {% if request.user|has_group:"admin" %}
+                                        <li><a class="dropdown-item" href="{% url 'confirm-delete-laptop' laptop.id %}"><span class="fa fa-trash"></span>&nbsp Delete Laptop</a></li>
+                                        {% endif %}
                                     </ul>
                                 </div> 
                             </div>

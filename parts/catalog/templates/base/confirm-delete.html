@@ -1,0 +1,37 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<section class="suggest-model">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="card model-change-card" style="border-radius: 1rem;">
+                <div class="d-flex align-items-center">
+                    <div class="card-body p-4 p-lg-5 text-black">
+                        <form method="POST" action="">
+                            {% csrf_token %}
+
+                            <div class="d-flex align-items-center ml-0 mb-3 pb-1">
+                                <span class="h1 fw-bold mb-0">Confirm Deletion</span>
+                            </div>
+
+                            <div class="form-outline mb-4 input-group">
+                                <span class="input-group-text form-span" id="id_type">Deleting</span>
+                                <span class="form-control form-span" id="id_type_ans">{{type_to_delete}}</span>
+                            </div>
+
+                            <div class="form-outline mb-4 input-group">
+                                <span class="input-group-text form-span" id="id_model">Model</span>
+                                <span class="form-control form-span" id="id_type_ans">{{model_number}}</span>
+                            </div>
+
+                            <button class="btn btn-danger me-4" type="submit" name="option" value="delete">Delete</button>
+                            <button class="btn btn-secondary" type="cancel" name="option" value="cancel">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

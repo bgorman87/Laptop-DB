@@ -703,3 +703,52 @@ def requested_laptop_change_review(request, laptop_model_change_id):
             return redirect('requested-laptop-changes')
     
     return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
+
+
+@login_required(login_url='login-page')
+def confirm_delete_laptop(request, laptop_id):
+
+    if not is_member(request.user, "mod"):
+        return redirect('home')
+
+    laptop = Laptop.objects.get(id=laptop_id)
+    model_number = laptop.laptop_model
+    type_to_delete = 'Laptop'
+
+    if request.method == "POST":
+        if request.POST.get("option") == "delete":
+            try:
+                laptop.delete()
+                messages.success(request, f"Laptop deleted.")
+            except Exception as e:
+                messages.error(request, f"Error deleting laptop: {e}")
+            return redirect('home')
+        elif request.POST.get("option") == "cancel":
+            messages.info(request, f"Deletion cancelled.")
+            return redirect('home')
+
+    return render(request, "base/confirm-delete.html", {'model_number': model_number, 'type_to_delete': type_to_delete})
+
+@login_required(login_url='login-page')
+def confirm_delete_part(request, part_id):
+    
+    if not is_member(request.user, "mod"):
+        return redirect('home')
+
+    part = Part.objects.get(id=part_id)
+    model_number = part.model
+    type_to_delete = part_types[part.part_type]
+
+    if request.method == "POST":
+        if request.POST.get("option") == "delete":
+            try:
+                part.delete()
+                messages.success(request, f"Part deleted.")
+            except Exception as e:
+                messages.error(request, f"Error deleting part: {e}")
+            return redirect('home')
+        elif request.POST.get("option") == "cancel":
+            messages.info(request, f"Deletion cancelled.")
+            return redirect('home')
+
+    return render(request, "base/confirm-delete.html", {'model_number': model_number, 'type_to_delete': type_to_delete})
