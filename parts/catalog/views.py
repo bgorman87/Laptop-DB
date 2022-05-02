@@ -439,6 +439,7 @@ def user_add_laptop_data(request, laptop_model):
 
     return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'form_data': form_data})
 
+@login_required(login_url='login-page')
 def part_upvote(request):
     user = request.user
     if user.is_authenticated:
@@ -608,7 +609,12 @@ def laptop_model_change(request, laptop_model):
     return render(request, "base/new-model-suggest.html", {'model_change_form': laptop_model_change_form, 'model': laptop_model})
 
 @login_required(login_url='login-page')
+
 def requested_part_changes(request):
+    
+    if not is_member(request.user, "mod"):
+        return redirect('home')
+    
     part_model_changes = PartModelChange.objects.filter(rejected_by=None).filter(approved_by=None)
     part_model_changes = list(part_model_changes)
     part_types_change = []
@@ -621,6 +627,9 @@ def requested_part_changes(request):
 
 @login_required(login_url='login-page')
 def requested_part_change_review(request, part_model_change_id):
+
+    if not is_member(request.user, "mod"):
+        return redirect('home')
 
     part_model_change = PartModelChange.objects.get(id=part_model_change_id)
     part = Part.objects.get(model=part_model_change.old_model)
@@ -663,6 +672,10 @@ def requested_part_change_review(request, part_model_change_id):
 
 @login_required(login_url='login-page')
 def requested_laptop_changes(request):
+
+    if not is_member(request.user, "mod"):
+        return redirect('home')
+
     laptop_model_changes = LaptopModelChange.objects.filter(rejected_by=None).filter(approved_by=None)
     laptop_model_changes = list(laptop_model_changes)
     
@@ -670,40 +683,43 @@ def requested_laptop_changes(request):
 
 @login_required(login_url='login-page')
 def requested_laptop_change_review(request, laptop_model_change_id):
-    
-        laptop_model_change = LaptopModelChange.objects.get(id=laptop_model_change_id)
-    
-        if request.method == "POST":
 
-            if request.POST.get("option") not in ["approved", "rejected"]:
-                messages.error(request, "Please select either approve or reject.")
-                return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
-            
-            if request.POST.get("option") == "approved":
-                try:
-                    laptop_model_change.approved = True
-                    laptop_model_change.approved_by = request.user
-                    laptop_model_change.approved_date = timezone.now()
-                    laptop_model_change.save()
-                except Exception as e:
-                    messages.error(request, f"Error approving laptop model change: {e}")
-                    return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
-                try:
-                    laptop = Laptop.objects.get(laptop_model=laptop_model_change.old_model)
-                    laptop.laptop_model = laptop_model_change.new_model
-                    laptop.save()
-                except Exception as e:
-                    messages.error(request, f"Error changing laptop model in current database: {e}")
-                    return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
-                messages.success(request, f"Laptop model change approved and succesfully changed in current database.")
-                return redirect('requested-laptop-changes')
-            elif request.POST.get("option") == "rejected":
-                laptop_model_change.rejected = True
-                laptop_model_change.rejected_by = request.user
-                laptop_model_change.rejected_date = timezone.now()
-                laptop_model_change.rejected_reason = request.POST.get("reason")
-                laptop_model_change.save()
-                messages.success(request, f"Laptop model change rejected.")
-                return redirect('requested-laptop-changes')
+    if not is_member(request.user, "mod"):
+        return redirect('home')
+
+    laptop_model_change = LaptopModelChange.objects.get(id=laptop_model_change_id)
+
+    if request.method == "POST":
+
+        if request.POST.get("option") not in ["approved", "rejected"]:
+            messages.error(request, "Please select either approve or reject.")
+            return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
         
-        return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
+        if request.POST.get("option") == "approved":
+            try:
+                laptop_model_change.approved = True
+                laptop_model_change.approved_by = request.user
+                laptop_model_change.approved_date = timezone.now()
+                laptop_model_change.save()
+            except Exception as e:
+                messages.error(request, f"Error approving laptop model change: {e}")
+                return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
+            try:
+                laptop = Laptop.objects.get(laptop_model=laptop_model_change.old_model)
+                laptop.laptop_model = laptop_model_change.new_model
+                laptop.save()
+            except Exception as e:
+                messages.error(request, f"Error changing laptop model in current database: {e}")
+                return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
+            messages.success(request, f"Laptop model change approved and succesfully changed in current database.")
+            return redirect('requested-laptop-changes')
+        elif request.POST.get("option") == "rejected":
+            laptop_model_change.rejected = True
+            laptop_model_change.rejected_by = request.user
+            laptop_model_change.rejected_date = timezone.now()
+            laptop_model_change.rejected_reason = request.POST.get("reason")
+            laptop_model_change.save()
+            messages.success(request, f"Laptop model change rejected.")
+            return redirect('requested-laptop-changes')
+    
+    return render(request, "base/requested-laptop-change-review.html", {'laptop': laptop_model_change})
