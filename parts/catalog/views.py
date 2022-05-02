@@ -59,25 +59,11 @@ class SaveError(Exception):
 def valid_file_extension(value):
     import os
     ext = os.path.splitext(value.name)[-1]
-    print(ext)
-    valid_extensions = ['.png', '.jpg', '.jpeg', '.gif'],
+    valid_extensions = ['.png', '.jpg', '.jpeg', '.gif']
     valid = False
     if ext.lower() in valid_extensions:
         valid = True
     return valid
-
-# def image_upload(image_file):
-#     print(image_file, file=sys.stderr)
-#     if settings.USE_S3:
-#         upload = Upload(file=image_file)
-#         print(upload, file=sys.stderr)
-#         upload.save()
-#         image_url = upload.file.url
-#     else:
-#         fs = FileSystemStorage()
-#         filename = fs.save(image_file.name, image_file)
-#         image_url = fs.url(filename)
-#     return image_url
         
 
 @login_required(login_url='login-page')
@@ -273,7 +259,6 @@ def add_laptop(request):
                     raise SaveError
                 try:
                     laptop.image = laptop_image
-                    print(laptop.image.url, file=sys.stderr)
                     laptop.save()
                 except Exception as e:
                     print(e)
@@ -449,7 +434,6 @@ def part_upvote(request):
             user = request.user
             if user.is_authenticated:
                 result = part.upvote(user)
-                print(result)
                 if "removed" in result.lower():
                     return JsonResponse({"response": result, "bool": True, "score": part.score, "vote_type": "removed"})
                 return JsonResponse({"response": result, "bool": True, "score": part.score, "vote_type": "upvote"})
@@ -518,7 +502,6 @@ def part_model_change(request, part_model):
     if request.method == "POST":
         
         suggested_part_model = request.POST.get("suggested_model")
-        print(f"current: {part_model} -- suggested: {suggested_part_model}")
 
         if suggested_part_model == part_model:
             messages.info(request, "You cannot change to the same model.")
@@ -540,7 +523,6 @@ def part_model_change(request, part_model):
         try:
             part_model_change = PartModelChange.objects.filter(part=part).filter(old_model=part_model).filter(new_model=suggested_part_model)
             if part_model_change.exists():
-                print("already exists")
                 if not part_model_change[0].approved:
                     if not part_model_change[0].rejected_by and not part_model_change[0].approved_by:
                         messages.error(request, "This change has already been suggested for this model. Please wait for mods to review.")
@@ -568,7 +550,6 @@ def laptop_model_change(request, laptop_model):
     if request.method == "POST":
         
         suggested_laptop_model = request.POST.get("suggested_model")
-        print(f"current: {laptop_model} -- suggested: {suggested_laptop_model}")
 
         if suggested_laptop_model == laptop_model:
             messages.info(request, "You cannot change to the same model.")
@@ -590,7 +571,6 @@ def laptop_model_change(request, laptop_model):
         try:
             laptop_model_change = LaptopModelChange.objects.filter(laptop=laptop).filter(old_model=laptop_model).filter(new_model=suggested_laptop_model)
             if laptop_model_change.exists():
-                print("already exists")
                 if not laptop_model_change[0].approved:
                     if not laptop_model_change[0].rejected_by and not laptop_model_change[0].approved_by:
                         messages.error(request, "This change has already been suggested for this model. Please wait for mods to review.")

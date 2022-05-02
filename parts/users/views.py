@@ -49,7 +49,6 @@ def loginPage (request):
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
-        print(user)
 
         if user is not None:
             login(request, user)
@@ -132,13 +131,12 @@ def resetUsernameCheck(request):
     form = UsernameVerification()
 
     if request.method == "POST":
-        for field in form:
-            print("Field Error:", field.name,  field.errors)
+        
         form = UsernameVerification(request.POST)
         if form.is_valid():
-            print(form)
+
             username = form.clean_username()
-            print(username)
+
 
             try:
                 user = User.objects.get(username=username)
