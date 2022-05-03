@@ -22,4 +22,6 @@ urlpatterns = [
     path('requested-laptop-change-review/<int:laptop_model_change_id>', views.requested_laptop_change_review, name='requested-laptop-change-review'),
     path('delete-laptop/<int:laptop_id>/', views.confirm_delete_laptop, name='confirm-delete-laptop'),
     path('delete-part/<int:part_id>/', views.confirm_delete_part, name='confirm-delete-part'),
+    path('verify-part/<int:part_id>/', views.verify_part, name='verify-part'),
+    path('verify-laptop/<int:laptop_id>/', views.verify_laptop, name='verify-laptop'),
 ]

@@ -752,3 +752,85 @@ def confirm_delete_part(request, part_id):
             return redirect('home')
 
     return render(request, "base/confirm-delete.html", {'model_number': model_number, 'type_to_delete': type_to_delete})
+
+@login_required(login_url='login-page')
+def verify_part(request, part_id):
+
+    if not is_member(request.user, "mod"):
+        return redirect('home')
+
+    part = Part.objects.get(id=part_id)
+    model_number = part.model
+    part_type = part_types[part.part_type]
+    is_verified = part.verified
+    print(part.verified)
+
+    if request.method == "POST":
+        print(request.POST)
+        if request.POST.get("option") == "verify":
+            try:
+                part.verified = True
+                part.verified_by = request.user
+                part.verified_date = timezone.now()
+                part.save()
+            except Exception as e:
+                messages.error(request, f"Error verifying part: {e}")
+                return render(request, "base/confirm-verify.html", {'model_number': model_number, 'type_to_verify': part_type, 'is_verified': is_verified})
+            messages.success(request, f"{part_type} - {model_number} verified.")
+            return redirect('item-page', model_number=model_number)
+        elif request.POST.get("option") == "unverify":
+            try:
+                part.verified = False
+                part.verified_by = None
+                part.verified_date = None
+                part.save()
+            except Exception as e:
+                messages.error(request, f"Error unverifying part: {e}")
+                return render(request, "base/confirm-verify.html", {'model_number': model_number, 'type_to_verify': part_type, 'is_verified': is_verified})
+            messages.success(request, f"{part_type} - {model_number} unverified.")
+            return redirect('item-page', model_number=model_number)
+        elif request.POST.get("option") == "cancel":
+            messages.info(request, f"Verification cancelled.")
+            return redirect('item-page', model_number=model_number)
+
+    return render(request, "base/confirm-verify.html", {'model_number': model_number, 'type_to_verify': part_type, 'is_verified': is_verified})
+
+@login_required(login_url='login-page')
+def verify_laptop(request, laptop_id):
+
+    if not is_member(request.user, "mod"):
+        return redirect('home')
+
+    laptop = Laptop.objects.get(id=laptop_id)
+    model_number = laptop.laptop_model
+    part_type = 'Laptop'
+    is_verified = laptop.verified
+
+    if request.method == "POST":
+        if request.POST.get("option") == "verify":
+            try:
+                laptop.verified = True
+                laptop.verified_by = request.user
+                laptop.verified_date = timezone.now()
+                laptop.save()
+            except Exception as e:
+                messages.error(request, f"Error verifying laptop: {e}")
+                return render(request, "base/confirm-verify.html", {'model_number': model_number, 'type_to_verify': part_type, 'is_verified': is_verified})
+            messages.success(request, f"Laptop - {model_number} verified.")
+            return redirect('laptop-page', laptop_model=model_number)
+        elif request.POST.get("option") == "unverify":
+            try:
+                laptop.verified = False
+                laptop.verified_by = None
+                laptop.verified_date = None
+                laptop.save()
+            except Exception as e:
+                messages.error(request, f"Error unverifying laptop: {e}")
+                return render(request, "base/confirm-verify.html", {'model_number': model_number, 'type_to_verify': part_type, 'is_verified': is_verified})
+            messages.success(request, f"Laptop - {model_number} unverified.")
+            return redirect('laptop-page', laptop_model=model_number)
+        elif request.POST.get("option") == "cancel":
+            messages.info(request, f"Verification cancelled.")
+            return redirect('laptop-page', laptop_model=model_number)
+
+    return render(request, "base/confirm-verify.html", {'model_number': model_number, 'type_to_verify': part_type, 'is_verified': is_verified})

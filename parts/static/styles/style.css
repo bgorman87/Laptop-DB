@@ -79,7 +79,11 @@ body {
 .verified {
     color:rgb(128, 200, 255);
     vertical-align: top;
-    
+}
+
+.unverified {
+    color:rgb(255, 128, 128);
+    vertical-align: top;
 }
 
 .options-btn {

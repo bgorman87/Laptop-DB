@@ -81,7 +81,9 @@ class Laptop(models.Model):
     country_id = CountryField(blank_label='-- Optional -- Select Country -- ', null=True, blank=True)
     image = models.FileField(null=True, blank=True, validators=[validate_image_file_extension])
     score = models.IntegerField(default=0)
-    verified = models.BooleanField(default=False)    
+    verified = models.BooleanField(default=False)
+    verified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='laptop_verification_approved_by')
+    verified_date = models.DateTimeField(null=True, blank=True)
     class Meta:
         ordering = ['-updated', '-created']
 
@@ -143,6 +145,8 @@ class Part(models.Model):
     image = models.FileField(null=True, blank=True, validators=[validate_image_file_extension])
     score = models.IntegerField(default=0)
     verified = models.BooleanField(default=False)
+    verified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='part_verification_approved_by')
+    verified_date = models.DateTimeField(null=True, blank=True)
             
     class Meta:
         ordering = ['-updated', '-created']

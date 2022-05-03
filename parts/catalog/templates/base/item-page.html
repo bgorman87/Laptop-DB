@@ -29,6 +29,11 @@
                                         <li><a class="dropdown-item" href="{% url 'part-model-change' part.model %}">Suggest New Model Number</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         {% if request.user|has_group:"admin" %}
+                                        {% if part.verified %}
+                                        <li><a class="dropdown-item" href="{% url 'verify-part' part.id %}"><span class="fa fa-solid fa-circle-xmark icon unverified"></span>&nbsp Verification Options</a></li>
+                                        {% else %}
+                                        <li><a class="dropdown-item" href="{% url 'verify-part' part.id %}"><span class="fa fa-solid fa-circle-check icon verified"></span>&nbsp Verification Options</a></li>
+                                        {% endif %}
                                         <li><a class="dropdown-item" href="{% url 'confirm-delete-part' part.id %}"><span class="fa fa-trash"></span>&nbsp Delete Part</a></li>
                                         {% endif %}
                                     </ul>
