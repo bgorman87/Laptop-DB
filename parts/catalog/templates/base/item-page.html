@@ -7,7 +7,7 @@
             <div class="container">
                 <div class="container-flex-row">
                     <div class="container-flex-row">
-                        <div class="container-flex-col mx-auto ml-1">   
+                        <div class="container-flex-col">   
                             <div class="container-flex-row title-item dark-grey-text h5">
                                 <div class="container-flex-col mx-1">
                                     {% csrf_token %}
@@ -39,8 +39,8 @@
                                     </ul>
                                 </div> 
                             </div>
-                            <div class="image-item mb-5">
-                                <img src="{{ part.image.url }}" class="card-img-top"/>
+                            <div class="container-flex-row image-item mb-5">
+                                <img src="{{ part.image.url }}" class="page-image mx-auto"/>
                             </div>
                         </div>
                     </div>

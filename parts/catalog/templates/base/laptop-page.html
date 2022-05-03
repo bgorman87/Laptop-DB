@@ -8,7 +8,7 @@
                 <div class="container-flex-row">
                     <div class="container-flex-row">
                         <div class="container-flex-col mx-auto ml-1">   
-                            <div class="container-flex-row title-item dark-grey-text h5 mx-auto">
+                            <div class="container-flex-row title-item dark-grey-text h5">
                                 <div class="container-flex-col mx-1">
                                     {% csrf_token %}
                                     <i id="laptop-upvote-{{laptop.id}}" class="fa fa-arrow-up laptop-upvote-click {{ laptop|laptop_upvoted:request.user }}" data-answer="{{laptop.id}}"></i>
@@ -45,8 +45,8 @@
                                     </ul>
                                 </div> 
                             </div>
-                            <div class="image-item mb-5">
-                                <img src="{{ laptop.image.url }}" class="card-img-top"/>
+                            <div class="container-flex-row image-item mb-5">
+                                <img src="{{ laptop.image.url }}" class="page-image mx-auto"/>
                             </div>
                         </div>
                     </div>
