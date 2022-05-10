@@ -72,7 +72,8 @@ EMAIL_PORT = get_env_variable('EMAIL_PORT')
 SECRET_KEY = get_env_variable('SECRET_KEY')
 DEFAULT_FROM_EMAIL = FROM_EMAIL
 
-CLICKY_SITE_ID = get_env_variable('CLICKY_SITE_ID')
+# CLICKY_SITE_ID = get_env_variable('CLICKY_SITE_ID')
+CLICKY_SITE_ID = "101365904"
 
 ALLOWED_HOSTS = [get_env_variable('ALLOWED_HOST1'), get_env_variable('ALLOWED_HOST2')]
 
