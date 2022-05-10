@@ -90,10 +90,14 @@ def registerPage (request):
         form = CreateUserForm(request.POST)
         username = request.POST.get('username')
         username = username.lower()
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
         email = request.POST.get('email')
 
         if form.is_valid():
+            
             try:
+                username = form.cleaned_data['username']
                 _ = User.objects.get(username=username)
                 messages.error(request, f"Username {username} already exists")
                 return render(request, 'base/register.html', {"form": form})

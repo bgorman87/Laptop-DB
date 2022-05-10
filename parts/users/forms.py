@@ -21,11 +21,13 @@ class CreateUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2")
+        fields = ("username", "first_name", "last_name", "email", "password1", "password2")
 
     def __init__(self, *args, **kwargs):
         super(CreateUserForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Username...", "required" : "required", "disabled" : "disabled"})
+        self.fields['first_name'].widget.attrs.update({'class' : 'form-control', "placeholder" : "First Name...", "required" : "required", "disabled" : "disabled"})
+        self.fields['last_name'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Last Name...", "required" : "required", "disabled" : "disabled"})
         self.fields['email'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Email...", "required" : "required", "disabled" : "disabled"})
         self.fields['password1'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Password...", "required" : "required", "disabled" : "disabled"})
         self.fields['password2'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Confirm Password...", "required" : "required", "disabled" : "disabled"})
@@ -33,6 +35,8 @@ class CreateUserForm(UserCreationForm):
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
+        user.first_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
         user.password = make_password(self.cleaned_data["password1"])
         user.username = self.cleaned_data["username"]
         user.username = user.username.lower()
