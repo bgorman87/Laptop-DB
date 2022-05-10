@@ -7,7 +7,6 @@ from django.contrib import messages
 from .models import *
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-import sys
 from django.utils import timezone
 
 part_types = {
@@ -834,3 +833,4 @@ def verify_laptop(request, laptop_id):
             return redirect('laptop-page', laptop_model=model_number)
 
     return render(request, "base/confirm-verify.html", {'model_number': model_number, 'type_to_verify': part_type, 'is_verified': is_verified})
+    

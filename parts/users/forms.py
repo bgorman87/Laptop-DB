@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django import forms
+from .models import ContactUs
 
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 
@@ -63,3 +64,25 @@ class UserPasswordChangeForm(SetPasswordForm):
         super(UserPasswordChangeForm, self).__init__(*args, **kwargs)
         self.fields['new_password1'].widget.attrs.update({'class' : 'form-control', "placeholder" : "New Password...", "required" : "required"})
         self.fields['new_password2'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Confirm New Password...", "required" : "required"})
+
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactUs
+        fields = ('message',)
+        widgets = {
+            'message': forms.Textarea(attrs={'class': 'form-control', 'rows': '5', 'placeholder': 'Message...'})
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.fields['message'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Message...'})
+
+        
+    def save(self, commit=True, message_type="general", created_by=None):
+        contact = super(ContactForm, self).save(commit=False)
+        contact.created_by = created_by
+        contact.message_type = message_type
+        if commit:
+            contact.save()
+        return contact

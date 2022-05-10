@@ -20,5 +20,9 @@ urlpatterns = [
     path('password-reset-complete/', views.passwordComplete, name='password_reset_complete'),
     path('reset-username-check/', views.resetUsernameCheck, name='reset-username-check'),
 
+    path('contact-us/', views.contact_admin, name='contact-us'),
+    path('active-contact-submissions/<str:msg_type>/', views.active_contact_submissions, name='active-contact-submissions'),
+    path('active-contact-review/<int:contact_id>/', views.active_contact_review, name='active-contact-review'),
+
 
 ]

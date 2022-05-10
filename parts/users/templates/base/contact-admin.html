@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<section class="suggest-model">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="card model-change-card" style="border-radius: 1rem;">
+                <div class="d-flex align-items-center">
+                    <div class="card-body p-4 p-lg-5 text-black">
+                        <form method="POST" action="">
+                            {% csrf_token %}
+
+                            <div class="d-flex align-items-center ml-0 mb-3 pb-1">
+                                <span class="h1 fw-bold mb-0">Contact Us</span>
+                            </div>
+
+                            <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Use this form to contact us for general inquiry, report a bug, or suggest a new feature.</h5>
+
+                            <div class="btn-group form-outline input-group mb-4" role="group" aria-label="Approve or Reject toggle button group">
+                                <input type="radio" class="btn-check" name="msg_type" value="general" id="id_general" autocomplete="off">
+                                <label class="btn btn-outline-grey" for="id_general">General</label>
+
+                                <input type="radio" class="btn-check" name="msg_type" value="suggestion" id="id_suggestion" autocomplete="off">
+                                <label class="btn btn-outline-grey" for="id_suggestion" >Suggestion</label>
+                              
+                                <input type="radio" class="btn-check" name="msg_type" value="bug" id="id_bug" autocomplete="off">
+                                <label class="btn btn-outline-grey" for="id_bug" >Bug</label>
+
+                            </div>
+
+                            <div class="form-outline mb-4 input-group">
+                                {{form.message}}
+                            </div>
+
+                            
+                            <button class="btn btn-success me-4" type="submit" name="option" value="send">Send Message</button>
+                            <button class="btn btn-secondary" type="cancel" name="option" value="cancel">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

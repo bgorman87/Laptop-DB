@@ -1,3 +1,5 @@
+# Catalog Models
+
 from django.db import models, IntegrityError
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField

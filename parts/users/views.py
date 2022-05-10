@@ -2,7 +2,10 @@
 
 
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, UsernameVerification, UserLogin
+from .forms import *
+from .models import ContactUs
+from django.conf import settings
+from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -13,6 +16,8 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from verify_email.email_handler import send_verification_email
 from catalog.views import is_member
+from datetime import timedelta
+from django.utils import timezone
 
 # Create your views here.
 @login_required(login_url='login/')
@@ -157,3 +162,101 @@ def resetUsernameCheck(request):
 def passwordComplete(request):
     messages.success(request, "Password reset successful. Please login using your new credentials.")
     return redirect('login-page')
+
+
+    # form page to be used for both issues and suggestions. Form results emailed to the admin.
+@login_required(login_url='login-page')
+def contact_admin(request):
+    
+    try:
+        last_submission_time = ContactUs.objects.filter(created_by=request.user).order_by('-created_at').first().created_at
+        allowed_time = timezone.now() - timedelta(seconds=30)
+        if last_submission_time > allowed_time:
+            difference = last_submission_time - allowed_time
+            if difference > timedelta(seconds=1):
+                msg = f"You have already submitted a message. Please wait {str(difference).split(':')[-1].split('.')[0]} more seconds before submitting another."
+            else:
+                msg = f"You have already submitted a message. Please wait {str(difference).split(':')[-1].split('.')[0]} more second before submitting another."
+
+            messages.error(request, msg)
+            return redirect('home')
+    except:
+        pass
+
+
+    if request.method == "POST":
+
+        form = ContactForm(request.POST)
+
+        message = request.POST.get('message')
+        if len(message) < 10:
+            messages.error(request, "Message must be at least 10 characters")
+            return render(request, "base/contact-admin.html", {'form': form})
+
+
+        msg_type = request.POST.get("msg_type")
+        if not msg_type:
+            messages.error(request, "Please select a type of message to send")
+            return render(request, "base/contact-admin.html", {'form': form})
+
+
+        user = request.user
+
+        form.created_by = user
+        if form.is_valid():
+            try:
+                subject = msg_type.capitalize() + " - LaptopDB Contact Us Form Message"
+                message = "From User: " + user.username + "\n" + "Name: " + user.first_name + " " + user.last_name + "\n" + "User Email: " + user.email + "\n" + "Joined: " + str(user.date_joined) + "\n\n" + form.cleaned_data['message']
+                sender = settings.FROM_EMAIL
+                recipients = [settings.FROM_EMAIL]
+                send_mail(subject, message, sender, recipients)
+                messages.success(request, f"{msg_type.capitalize()} submission successful.")
+            except Exception as e:
+                print(e)
+                messages.error(request, f"Error sending message.")
+                return render(request, "base/contact-admin.html", {'form': form})
+            
+            try:
+                form.save(message_type=msg_type, created_by=user)
+            except Exception as e:
+                print(e)
+            return redirect('home')
+        else:
+            print(form.errors)
+            messages.error(request, f"Invalid Form.")
+            return render(request, "base/contact-admin.html", {'form': form})
+        
+    else:
+        form = ContactForm()
+    return render(request, "base/contact-admin.html", {'form': form})
+
+def active_contact_submissions(request, msg_type):
+    
+    if not is_member(request.user, "admin"):
+        return redirect('home')
+
+    title = msg_type.capitalize()
+
+    submissions = ContactUs.objects.filter(message_type=msg_type).filter(reviewed=False)
+
+    return render(request, "base/active-contact-submissions.html", {'submissions': submissions, 'title': title})
+
+def active_contact_review(request, contact_id):
+    if not is_member(request.user, "admin"):
+        return redirect('home')
+    
+    submission = ContactUs.objects.get(id=contact_id)
+
+    if request.method == "POST":
+        if request.POST.get('option') == "reviewed":
+            submission.reviewed = True
+            submission.save()
+            messages.success(request, "Submission marked as reviewed.")
+            return redirect('active-contact-submissions', msg_type=submission.message_type)
+        else:
+            submission.reviewed = False
+            submission.save()
+            return redirect('active-contact-submissions', msg_type=submission.message_type)
+
+
+    return render(request, "base/active-contact-review.html", {'submission': submission})
