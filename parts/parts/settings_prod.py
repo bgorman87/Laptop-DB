@@ -72,9 +72,6 @@ EMAIL_PORT = get_env_variable('EMAIL_PORT')
 SECRET_KEY = get_env_variable('SECRET_KEY')
 DEFAULT_FROM_EMAIL = FROM_EMAIL
 
-# CLICKY_SITE_ID = get_env_variable('CLICKY_SITE_ID')
-CLICKY_SITE_ID = "101365904"
-
 ALLOWED_HOSTS = [get_env_variable('ALLOWED_HOST1'), get_env_variable('ALLOWED_HOST2')]
 
 
@@ -103,7 +100,6 @@ INSTALLED_APPS = [
     "django_countries",
     "storages",
     "verify_email.apps.VerifyEmailConfig",
-    "analytical",
 ]
 
 MIDDLEWARE = [
@@ -243,5 +239,3 @@ EXPIRE_AFTER = "2h"
 # 250MB - 214958080
 # 500MB - 429916160
 MAX_UPLOAD_SIZE = 10485760
-
-SECURE_REFERRER_POLICY = "unsafe-url"
