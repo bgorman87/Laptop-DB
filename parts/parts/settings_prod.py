@@ -244,4 +244,4 @@ EXPIRE_AFTER = "2h"
 # 500MB - 429916160
 MAX_UPLOAD_SIZE = 10485760
 
-SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SECURE_REFERRER_POLICY = "unsafe-url"
