@@ -234,6 +234,7 @@ def contact_admin(request):
         form = ContactForm()
     return render(request, "base/contact-admin.html", {'form': form})
 
+@login_required(login_url='login-page')
 def active_contact_submissions(request, msg_type):
     
     if not is_member(request.user, "admin"):
@@ -245,6 +246,7 @@ def active_contact_submissions(request, msg_type):
 
     return render(request, "base/active-contact-submissions.html", {'submissions': submissions, 'title': title})
 
+@login_required(login_url='login-page')
 def active_contact_review(request, contact_id):
     if not is_member(request.user, "admin"):
         return redirect('home')

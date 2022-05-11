@@ -65,7 +65,7 @@ def valid_file_extension(value):
     return valid
         
 
-@login_required(login_url='login-page')
+# @login_required(login_url='login-page')
 def laptop_page(request, laptop_model):
     
     keyboards = []
@@ -123,14 +123,14 @@ def laptop_page(request, laptop_model):
 
     return render(request, "base/laptop-page.html", {"laptop": laptop, "parts": parts_data, "non_active": non_active_parts})
 
-@login_required(login_url='login-page')
+# @login_required(login_url='login-page')
 def item_page(request, model_number):
     part = Part.objects.get(model=model_number)
     part_type = part_types[part.part_type]
     laptops = part.laptop_model.all()
     return render(request, "base/item-page.html", {"model_number": model_number, "laptops": laptops, "model_name": part_type, "part": part})
 
-@login_required(login_url='login-page')
+# @login_required(login_url='login-page')
 def home(request):
 
     recent_parts = list(Part.objects.all()[0:4])
@@ -139,7 +139,7 @@ def home(request):
     recent_laptops = zip([recent_laptops], ["laptop"])
     return render(request, 'base/home.html', {"part_results": recent_parts, "laptop_results": recent_laptops})
 
-@login_required(login_url='login-page')
+# @login_required(login_url='login-page')
 def search_results(request):
     p = request.GET.get('p') if request.GET.get('p') != None else ''
     if p:
