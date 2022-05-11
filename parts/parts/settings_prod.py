@@ -100,12 +100,14 @@ INSTALLED_APPS = [
     "django_countries",
     "storages",
     "verify_email.apps.VerifyEmailConfig",
+    'tracking',
 ]
 
 MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'tracking.middleware.VisitorTrackingMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

@@ -13,6 +13,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('admin/', admin.site.urls),
     path('verification/', include('verify_email.urls')),
+    path('tracking/', include('tracking.urls')),
 ]
 
 
