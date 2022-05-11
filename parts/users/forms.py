@@ -25,12 +25,12 @@ class CreateUserForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(CreateUserForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Username...", "required" : "required", "disabled" : "disabled"})
-        self.fields['first_name'].widget.attrs.update({'class' : 'form-control', "placeholder" : "First Name...", "required" : "required", "disabled" : "disabled"})
-        self.fields['last_name'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Last Name...", "required" : "required", "disabled" : "disabled"})
-        self.fields['email'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Email...", "required" : "required", "disabled" : "disabled"})
-        self.fields['password1'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Password...", "required" : "required", "disabled" : "disabled"})
-        self.fields['password2'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Confirm Password...", "required" : "required", "disabled" : "disabled"})
+        self.fields['username'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Username...", "required" : "required"})
+        self.fields['first_name'].widget.attrs.update({'class' : 'form-control', "placeholder" : "First Name...", "required" : "required"})
+        self.fields['last_name'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Last Name...", "required" : "required"})
+        self.fields['email'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Email...", "required" : "required"})
+        self.fields['password1'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Password...", "required" : "required"})
+        self.fields['password2'].widget.attrs.update({'class' : 'form-control', "placeholder" : "Confirm Password...", "required" : "required"})
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)

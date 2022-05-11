@@ -85,7 +85,7 @@ def registerPage (request):
     form = CreateUserForm()
 
     if request.method == "POST":
-        return redirect('naughty-page')
+        # return redirect('naughty-page')
         
         form = CreateUserForm(request.POST)
         username = request.POST.get('username')
