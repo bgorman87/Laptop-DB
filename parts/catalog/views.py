@@ -346,12 +346,14 @@ def edit_laptop(request, laptop_model):
                                 else: messages.error(request, f"{model_number} image is not a valid file type. Choose a new image or notify administrator.")
                                 raise SaveError
                         else:
-                            if model_image and valid_file_extension(model_image.name):
-                                part.image = model_image
-                                part.save()
-                            elif not valid_file_extension(model_image.name):
-                                messages.error(request, f"{model_number} image is not a valid file type. Choose a new image.")
-                                raise SaveError
+                            if model_image:
+                                print(model_image)
+                                if valid_file_extension(model_image):
+                                    part.image = model_image
+                                    part.save()
+                                else:
+                                    messages.error(request, f"{model_number} image is not a valid file type. Choose a new image.")
+                                    raise SaveError
                             
                     except Exception as e:
                         print(e)
@@ -366,7 +368,7 @@ def edit_laptop(request, laptop_model):
                         messages.error(request, f"Unable to link model number: {model_number} to laptop: {laptop_model}. Check info or notify administrator.")
                         raise SaveError
         except SaveError:
-            return render(request, 'base/edit-laptop.html', {"laptop": laptop})    
+            return render(request, 'base/edit-laptop-data.html', {"laptop": laptop})    
         
         messages.success(request, "Thank you for adding to our database.")
         return redirect(f"/laptop/{laptop_model}")
