@@ -8,6 +8,7 @@ from .models import *
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.db.models import Q
 
 part_types = {
     'KEYB': 'Keyboard',
@@ -145,7 +146,8 @@ def search_results(request):
     if p:
         part_type = list(Part.objects.filter(part_type__icontains=p))
         model_number = list(Part.objects.filter(model__icontains=p))
-        laptop = list(Laptop.objects.filter(laptop_model__icontains=p))
+
+        laptop = Laptop.objects.filter(Q(laptop_model__icontains=p) | Q(manufacturer__icontains=p) | Q(series__icontains=p)).distinct()
 
         part_results = zip([part_type + model_number], ["part"])
         laptop_results = zip([laptop], ["laptop"])
