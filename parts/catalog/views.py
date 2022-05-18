@@ -184,8 +184,8 @@ def add_laptop(request):
         # Check if manufacturer and series were given and if not then return message with form data
         manufacturer = request.POST.get('manufacturer')
         series = request.POST.get('series')
-        if not manufacturer or not series:
-            messages.error(request, f"Please enter a valid manufacturer and series.")
+        if not manufacturer:
+            messages.error(request, f"Please enter a valid manufacturer")
             return render(request, 'base/add-laptop.html', {"form": laptop_form})
         
         try:
