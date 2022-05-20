@@ -257,7 +257,7 @@ def active_contact_review(request, contact_id):
         if request.POST.get('option') == "reviewed":
             submission.reviewed = True
             submission.save()
-            messages.success(request, "Submission marked as reviewed.")
+            messages.success(request, f"{submission.message_type.capitalize()} submission marked as reviewed.")
             return redirect('active-contact-submissions', msg_type=submission.message_type)
         else:
             submission.reviewed = False

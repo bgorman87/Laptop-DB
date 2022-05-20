@@ -1,6 +1,7 @@
 from django import template
 from catalog.views import part_types, is_member
 from catalog.models import *
+from users.models import ContactUs
 
 register = template.Library()
 
@@ -28,4 +29,5 @@ def notifications(user):
     if is_member(user, 'mod'):
         notification_count += PartModelChange.objects.filter(approved_by=None, rejected_by=None).count()
         notification_count += LaptopModelChange.objects.filter(approved_by=None, rejected_by=None).count()
+        notification_count += ContactUs.objects.filter(reviewed=False).count()
     return notification_count

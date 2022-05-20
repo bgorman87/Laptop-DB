@@ -68,7 +68,7 @@
                     <span class="badge bg-secondary">0</span>
                   {% endif %}
                 </a></li>
-                <li><a class="dropdown-item" href="{% url 'active-contact-submissions' "bug" %}">
+                <li><a class="dropdown-item" href="{% url 'active-contact-submissions' "general" %}">
                   Active General Submissions
                   {% if user|active_contact_submissions:"general" > 0 %}
                     <span class="badge bg-danger">{{user|active_contact_submissions:"general"}}</span>
