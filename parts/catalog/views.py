@@ -284,6 +284,34 @@ def edit_laptop(request, laptop_model):
         messages.info(request, f"Unable to find laptop model {laptop_model}. Try again or notify administrator.")
         return redirect('home-page')
     
+    forms = []
+    
+    # Check is user is a mod. If so show all form fields, if not show only blank fields
+    part_types_list = list(part_types.keys())
+    part_types_full_names_list = list(part_types.values())
+    used_part_types_list = []
+    used_part_types_full_names_list = []
+    for i, part_type in enumerate(part_types_list):
+        try:
+            part = Part.objects.filter(laptop_model=laptop.id).filter(part_type=part_type)
+            part = part[0]
+            if part and (is_member(user, "mod") or is_member(user, "admin")):
+                part_form = PartForm(instance=part)
+                forms.append(part_form)
+                used_part_types_list.append(part_type)
+                used_part_types_full_names_list.append(part_types_full_names_list[i])
+            elif not part:
+                part_form = PartForm(instance=user)
+                forms.append(part_form)
+                used_part_types_list.append(part_type)
+                used_part_types_full_names_list.append(part_types_full_names_list[i])
+        except Exception as e:
+            part_form = PartForm(instance=user)
+            forms.append(part_form)
+            used_part_types_list.append(part_type)
+            used_part_types_full_names_list.append(part_types_full_names_list[i])
+    
+    form_data = zip(forms, used_part_types_full_names_list, used_part_types_list)
     
     if request.method == "POST":
         
@@ -328,6 +356,7 @@ def edit_laptop(request, laptop_model):
                     try:
                         try:
                             part = Part.objects.get(model=model_number)
+                            print(part.id)
                         except:
                             part = Part.objects.create(
                                 model=model_number,
@@ -337,6 +366,7 @@ def edit_laptop(request, laptop_model):
                             )
                             part.laptop_model.add(laptop.id)
                         # Check if new image is given and if existing image is default, if so then overwrite
+                        # is user is admin they can bypass upload restrictions
                         if not is_member(user, "admin"):
                             if model_image and "/default.png" in part.image.url.lower():
                                 if valid_file_extension(model_image.name):
@@ -362,47 +392,18 @@ def edit_laptop(request, laptop_model):
                         messages.error(request, f"Unable to add model number: {model_number} with part type: {part_type}. Check info or notify administrator.")
                         raise SaveError
                     try:
-                        part = Part.objects.filter(model=model_number).filter(laptop_model=laptop.id)
-                        if not part:
+                        part_check = Part.objects.filter(model=model_number).filter(laptop_model=laptop.id)
+                        if not part_check:
                             part.laptop_model.add(laptop.id)
                     except Exception as e:
                         print(e)
                         messages.error(request, f"Unable to link model number: {model_number} to laptop: {laptop_model}. Check info or notify administrator.")
                         raise SaveError
         except SaveError:
-            return render(request, 'base/edit-laptop-data.html', {"laptop": laptop})    
+            return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'laptop_image_url': laptop.image.url, 'form_data': form_data})    
         
         messages.success(request, "Thank you for adding to our database.")
         return redirect(f"/laptop/{laptop_model}")
-
-    forms = []
-    
-    # Check is user is a mod. If so show all form fields, if not show only blank fields
-    part_types_list = list(part_types.keys())
-    part_types_full_names_list = list(part_types.values())
-    used_part_types_list = []
-    used_part_types_full_names_list = []
-    for i, part_type in enumerate(part_types_list):
-        try:
-            part = Part.objects.filter(laptop_model=laptop.id).filter(part_type=part_type)
-            part = part[0]
-            if part and (is_member(user, "mod") or is_member(user, "admin")):
-                part_form = PartForm(instance=part)
-                forms.append(part_form)
-                used_part_types_list.append(part_type)
-                used_part_types_full_names_list.append(part_types_full_names_list[i])
-            elif not part:
-                part_form = PartForm(instance=user)
-                forms.append(part_form)
-                used_part_types_list.append(part_type)
-                used_part_types_full_names_list.append(part_types_full_names_list[i])
-        except Exception as e:
-            part_form = PartForm(instance=user)
-            forms.append(part_form)
-            used_part_types_list.append(part_type)
-            used_part_types_full_names_list.append(part_types_full_names_list[i])
-    
-    form_data = zip(forms, used_part_types_full_names_list, used_part_types_list)
 
     return render(request, "base/edit-laptop-data.html", {'laptop_model': laptop_model, 'laptop_image_url': laptop.image.url, 'form_data': form_data})
 
