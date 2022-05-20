@@ -356,7 +356,6 @@ def edit_laptop(request, laptop_model):
                     try:
                         try:
                             part = Part.objects.get(model=model_number)
-                            print(part.id)
                         except:
                             part = Part.objects.create(
                                 model=model_number,
