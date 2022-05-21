@@ -19,7 +19,7 @@
                                     <strong>{{laptop.manufacturer}}&nbsp{{laptop.series}}&nbsp({{laptop.laptop_model}})</strong>
                                 </div>
                                 <div class="container-flex-col mx-1">
-                                    <i class="{{ laptop|laptop_verified }}" aria-hidden="true"></i>
+                                    <i class="{{ laptop|laptop_verified }}" aria-hidden="true" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Verified Model Number"></i>
                                 </div>
                                 <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{laptop.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
                                 <div class="container-flex-col mx-3">
@@ -82,7 +82,7 @@
                                             {% endif %}
 
                                             </ul>
-                                            
+                                            <i class="{{ item|part_verified }}" aria-hidden="true" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Verified Model Number"></i>
                                             
                                             <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{item.model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
 

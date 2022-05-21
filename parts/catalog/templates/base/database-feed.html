@@ -19,7 +19,7 @@
                 <a class="dark-grey-text mx-1" href="{% url 'item-page' item.model %}">{{item.model}}</a>
             {% endif %}
             {% if item|part_verified %}
-                <i class="{{ item|part_verified }}" aria-hidden="true"></i>
+                <i class="{{ item|part_verified }}" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Verified Model Number"></i>
             {% endif %}
             <a class="grey-text mx-1" href="https://www.ebay.com/sch/i.html?_nkw={{item.model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
             </div>
@@ -38,7 +38,7 @@
             <i id="laptop-downvote-{{item.id}}" class="fa fa-arrow-down laptop-downvote-click {{ item|laptop_downvoted:request.user }}" data-answer="{{item.id}}"></i>
             <a class="dark-grey-text mx-1 text-break" href="{% url 'laptop-page' item.laptop_model %}">{{item.laptop_model}}</a>
             {% if item|laptop_verified %}
-                <i class="{{ item|laptop_verified }}" aria-hidden="true"></i>
+                <i class="{{ item|laptop_verified }}" aria-hidden="true" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Verified Model Number"></i>
             {% endif %}
             <a class="grey-text mx-1" href="https://www.ebay.com/sch/i.html?_nkw={{item.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
             </div>  
@@ -73,7 +73,7 @@
                     <span class="laptop-score-count-{{laptop.id}}">{{laptop.score}}</span>
                     <i id="laptop-downvote-{{laptop.id}}" class="fa fa-arrow-down laptop-downvote-click {{ laptop|laptop_downvoted:request.user }}" data-answer="{{laptop.id}}"></i>    
                     <a class="text-decoration-none dark-grey-text mx-1" href="{% url 'laptop-page' laptop.laptop_model %}">{{laptop.laptop_model}}</a>
-                    <i class="{{ laptop|laptop_verified }}" aria-hidden="true"></i>
+                    <i class="{{ laptop|laptop_verified }}" aria-hidden="true" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Verified Model Number"></i>
                     <a class="grey-text mx-2" href="https://www.ebay.com/sch/i.html?_nkw={{laptop.laptop_model}}" target="_blank"><i class="fa a-duotone fa-tags"></i></a>
                 </div>
 
