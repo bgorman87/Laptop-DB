@@ -29,12 +29,19 @@ body {
     width: 100% !important;
 }
 
+.item-title {
+    margin-right: 1.5rem;
+}
+
 @media only screen and (min-width: 0px) {
     .user-card {
         width: 95% !important;
     }
     .model-change-card {
         width: 95% !important;
+    }
+    .item-title {
+        margin-right: 0;
     }
 }
 @media only screen and (min-width: 700px) {
@@ -43,6 +50,9 @@ body {
     }
     .model-change-card {
         width: 80% !important;
+    }
+    .item-title {
+        margin-right: 0;
     }
 }
 @media only screen and (min-width: 900px) {
@@ -60,6 +70,7 @@ body {
     .model-change-card {
         width: 60% !important;
     }
+    
 }
 
 .nav-search {
