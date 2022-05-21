@@ -11,43 +11,44 @@ from django.utils import timezone
 from django.db.models import Q
 
 part_types = {
-    'KEYB': 'Keyboard',
-    'BOTC': 'Bottom Cover',
-    'PALR': 'Palm Rest',
-    'LCDC': 'LCD Cover',
     'LCD': 'LCD',
+    'KEYB': 'Keyboard',
+    'BATT': 'Battery',
+    'PALR': 'Palm Rest',
+    'BOTC': 'Bottom Cover',
     'LCDB': 'LCD Bezel',
+    'LCDC': 'LCD Cover',
     'LCDT': 'LCD Touch Assembly',
-    'TRA': 'Track pad',
-    'SPE': 'Speakers',
-    'MIC': 'Microphone',
-    'CAM': 'Camera',
-    'POW': 'Power Button',
-    'HEAT': 'Heat sink',
-    'CDD': 'CD Drive',
-    'WIFI': 'Wi-Fi Adapter',
-    'MOTH': 'Motherboard',
-    'WIFA': 'Wi-Fi Antenna',
     'DICA': 'Display Cable',
-    'HDDC': 'Hard Drive Caddy',
-    'TPFC': 'Track pad Flex Cable',
+    'RAM': 'RAM',
+    'LFTH': 'Left Hinge',
+    'RGTH': 'Right Hinge',
+    'CHRP': 'Charging Port',
+    'CPUF': 'CPU Fan',
+    'SATC': 'SATA Cable/Flex',
+    'SATS': 'SATA Sub Board',
+    'POW': 'Power Button',
     'PBFC': 'Power Button Flex Cable',
+    'HDDC': 'Hard Drive Caddy',
+    'TRA': 'Track pad',
+    'TPFC': 'Track pad Flex Cable',
+    'SPE': 'Speakers',
+    'CAM': 'Camera',
+    'CHAR': 'Charger',
+    'MIC': 'Microphone',
+    'HEAT': 'Heat sink',
+    'MOTH': 'Motherboard',
+    'GRAC': 'Graphics Card',
+    'WIFI': 'Wi-Fi Adapter',
+    'WIFA': 'Wi-Fi Antenna',
+    'CDD': 'CD Drive',
     'SB01': 'Sub Board 1',
     'SB02': 'Sub Board 2',
     'SB03': 'Sub Board 3',
-    'SBFC': 'Sub Board Flex Cable',
-    'CHAR': 'Charger',
-    'BATT': 'Battery',
-    'CHRP': 'Charging Port',
-    'CPUF': 'CPU Fan',
-    'LFTH': 'Left Hinge',
-    'RGTH': 'Right Hinge',
-    'SAT': 'SATA',
-    'SATC': 'SATA Cable',
-    'POR': 'Ports',
-    'GRAC': 'Graphics Card',
-    'RAM': 'RAM'
-    }
+    'SBC1': 'Sub Board Flex Cable 1',
+    'SBC2': 'Sub Board Flex Cable 2',
+    'SBC3': 'Sub Board Flex Cable 3'
+}
 
 def is_member(user, group_name):
     return user.groups.filter(name=group_name).exists()
@@ -69,44 +70,45 @@ def valid_file_extension(value):
 # @login_required(login_url='login-page')
 def laptop_page(request, laptop_model):
     
-    keyboards = []
-    bottom_covers = []
-    palm_rests = []
-    lcd_covers = []
     lcds = []
-    lcd_bezels = []
-    lcd_touch_assemblies = []
-    track_pads = []
-    speakers = []
-    microphones = []
-    cameras = []
-    power_buttons = []
-    heat_sinks = []
-    cd_drives = []
-    wifi_adapters = []
-    motherboards = []
-    wifi_antennas = []
-    display_cables = []
-    hard_drive_caddies = []
-    track_pad_flex_cables = []
-    power_button_flex_cables = []
-    sub_boards_1 = []
-    sub_boards_2 = []
-    sub_boards_3 = []
-    sub_board_flex_cables = []
-    chargers = []
+    keyboards = []
     batteries = []
-    charging_ports = []
-    cpu_fans = []
+    palm_rests = []
+    bottom_covers = []
+    lcd_bezels = []
+    lcd_covers = []
+    lcd_touch_assemblys = []
+    display_cables = []
+    rams = []
     left_hinges = []
     right_hinges = []
-    satas = []
-    sata_cables = []
-    ports = []
+    charging_ports = []
+    cpu_fans = []
+    sata_cable_or_flexs = []
+    sata_sub_boards = []
+    power_buttons = []
+    power_button_flex_cables = []
+    hard_drive_caddys = []
+    track_pads = []
+    track_pad_flex_cables = []
+    speakers = []
+    cameras = []
+    chargers = []
+    microphones = []
+    heat_sinks = []
+    motherboards = []
     graphics_cards = []
-    rams = []
+    wifi_adapters = []
+    wifi_antennas = []
+    cd_drives = []
+    sub_board_1s = []
+    sub_board_2s = []
+    sub_board_3s = []
+    sub_board_flex_cable_1s = []
+    sub_board_flex_cable_2s = []
+    sub_board_flex_cable_3s = []
 
-    parts_lists = [keyboards , bottom_covers, palm_rests, lcd_covers, lcds, lcd_bezels, lcd_touch_assemblies, track_pads, speakers, microphones, cameras, power_buttons, heat_sinks, cd_drives, wifi_adapters, motherboards, wifi_antennas, display_cables, hard_drive_caddies, track_pad_flex_cables, power_button_flex_cables, sub_boards_1, sub_boards_2, sub_boards_3, sub_board_flex_cables, chargers, batteries, charging_ports, cpu_fans, left_hinges, right_hinges, satas, sata_cables, ports, graphics_cards, rams]
+    parts_lists = [lcds, keyboards, batteries, palm_rests, bottom_covers, lcd_bezels, lcd_covers, lcd_touch_assemblys, display_cables, rams, left_hinges, right_hinges, charging_ports, cpu_fans, sata_cable_or_flexs, sata_sub_boards, power_buttons, power_button_flex_cables, hard_drive_caddys, track_pads, track_pad_flex_cables, speakers, cameras, chargers, microphones, heat_sinks, motherboards, graphics_cards, wifi_adapters, wifi_antennas, cd_drives, sub_board_1s, sub_board_2s, sub_board_3s, sub_board_flex_cable_1s, sub_board_flex_cable_2s, sub_board_flex_cable_3s,]
 
     laptop = Laptop.objects.get(laptop_model=laptop_model)
     active_parts = []
