@@ -52,14 +52,6 @@ def get_env_variable(var_name):
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 FROM_EMAIL = get_env_variable('FROM_EMAIL')
@@ -72,7 +64,7 @@ EMAIL_PORT = get_env_variable('EMAIL_PORT')
 SECRET_KEY = get_env_variable('SECRET_KEY')
 DEFAULT_FROM_EMAIL = FROM_EMAIL
 
-ALLOWED_HOSTS = [get_env_variable('ALLOWED_HOST1'), get_env_variable('ALLOWED_HOST2')]
+ALLOWED_HOSTS = [get_env_variable('ALLOWED_HOST1'), get_env_variable('ALLOWED_HOST2'), 'www.laptop-db.com']
 
 
 MESSAGE_TAGS = {
