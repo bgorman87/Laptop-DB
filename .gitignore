@@ -1,7 +1,5 @@
 /venv
-/parts/parts/settings.py
-/parts/parts/wsgi.py
-/parts/db.sqlite3
-/parts/static/images/*
+**/db.sqlite3
+**/static/images/*
 *__pycache__*
-*migrations*
+/migrations/
