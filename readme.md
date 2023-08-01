@@ -4,7 +4,7 @@ Laptop-DB is a web application for managing laptops and their associated parts. 
 
 ## Features
 
-- Laptop information lookup by serial number
+- Laptop information lookup by model/serial number
 - Part information lookup by part ID
 - Upvoting and downvoting of laptop and part data
 - Reporting feature for suggesting data changes/bugs/general comments
