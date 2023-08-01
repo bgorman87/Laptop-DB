@@ -1,0 +1,9 @@
+django
+whitenoise
+wheel
+mod_wsgi
+django_countries
+django-storages
+Django-Verify-Email
+django-tracking2
+boto3
