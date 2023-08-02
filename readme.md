@@ -2,6 +2,10 @@
 
 Laptop-DB is a web application for managing laptops and their associated parts. It allows users to search for laptop information down to the model/serial number and find associated parts. Users can also search for specific parts and see all the laptops that use that part. The data is user-generated, and the application includes badges to denote verified values. Users can upvote or downvote laptop and part information, and there is a reporting feature for suggesting different values.
 
+## Live Version
+
+[laptop-db.com](https://www.laptop-db.com)
+
 ## Features
 
 - Laptop information lookup by model/serial number
@@ -20,4 +24,4 @@ Laptop-DB is a web application for managing laptops and their associated parts. 
 
 ## Deployment
 
-This application is deployed on [laptop-db.com](https://www.laptop-db.com).
+If attempting to deploy locally, you'll need to create development settings.py and wsgi.py files, as well as install apache before installing packages from requirements.txt.
